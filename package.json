@@ -1,0 +1,20 @@
+{
+  "name": "f1-data-science-project",
+  "version": "1.0.0",
+  "description": "Formula 1 Data Science Project - 2024 Season Analysis",
+  "main": "index.html",
+  "scripts": {
+    "dev": "python -m http.server 8000",
+    "deploy": "vercel --prod"
+  },
+  "keywords": [
+    "formula1",
+    "f1",
+    "data-science",
+    "fastf1",
+    "racing",
+    "analytics"
+  ],
+  "author": "Your Name",
+  "license": "MIT"
+}
