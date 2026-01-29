@@ -338,14 +338,14 @@
                 <p>The significance of data analysis in Formula 1 extends beyond team operations to influence regulatory decisions, broadcast coverage, and fan engagement. Teams invest heavily in data infrastructure, employing hundreds of engineers and analysts who process telemetry data in real-time during races and conduct detailed post-race analysis to gain competitive advantages. Race strategy decisions regarding tire compounds, pit stop timing, fuel loads, and overtaking opportunities increasingly rely on sophisticated predictive models that synthesize historical performance data, real-time conditions, and competitor behavior. The sport's technical regulations evolve annually, creating new challenges and opportunities for teams to exploit data-driven insights in car development and race execution. Furthermore, the global nature of Formula 1, with races held across diverse circuits ranging from high-speed tracks like Monza to technical street circuits like Monaco, produces varied performance characteristics that demand adaptive analytical approaches. Understanding these patterns through comprehensive data analysis reveals how track characteristics, weather conditions, tire management, and technical innovations interact to determine competitive outcomes.</p>
 
                 <div class="intro-image">
-                    <img src="https://via.placeholder.com/1000x400/FFFFFF/E10600?text=Formula+1+Racing" alt="Formula 1 Racing">
+                    <img src="img\ferrari car.jpg" alt="Formula 1 Racing">
                 </div>
 
                 <p>Current research in Formula 1 data science has explored various dimensions of race performance, including lap time prediction, optimal pit stop strategies, tire degradation modeling, and driver performance evaluation. Academic studies have applied machine learning techniques to predict race winners, classify driver skill levels, and optimize team strategies based on historical data patterns. Industry practitioners have developed sophisticated simulation tools that model race scenarios, enabling teams to test strategic options before making critical decisions during live races. The availability of public timing data through official channels and community-developed APIs like FastF1 has democratized access to Formula 1 telemetry, enabling researchers and enthusiasts to conduct independent analyses and develop innovative analytical methodologies. Despite these advances, significant opportunities remain to deepen understanding of performance factors, particularly in areas such as tire compound selection under varying conditions, the impact of aerodynamic regulations on competitive balance, and the quantification of driver contributions relative to car performance.</p>
 
                 <p>This data science project investigates Formula 1 racing performance through comprehensive analysis of the 2024 season, focusing on lap times, tire strategies, driver performance, and race dynamics across multiple Grand Prix events. The analysis examines how various factors including tire compound selection, tire degradation over race distance, track characteristics, and race phase influence lap time performance and competitive outcomes. By gathering and analyzing official timing data, this research seeks to uncover patterns in racing performance that enhance understanding of competitive dynamics. The project utilizes data gathered through the FastF1 API, which provides access to official Formula 1 timing data including lap times, sector times, speed measurements, tire information, and race positions, creating a robust foundation for multi-dimensional analysis.</p>
 
-                <p>The implications of this research extend to multiple stakeholders within the Formula 1 ecosystem. For racing teams, insights into tire degradation patterns and optimal compound selection could refine race strategies and improve competitive positioning. For race analysts and commentators, understanding the statistical relationships between performance variables enhances the quality of race coverage and audience engagement. For fans and enthusiasts, data-driven analysis deepens appreciation of the sport by revealing the complex interplay of factors that determine race outcomes beyond what is visible during broadcast coverage. For the broader motorsport community, methodological approaches developed through this analysis contribute to the growing field of sports analytics and demonstrate how advanced data science techniques can extract meaningful insights from complex, high-frequency performance data. The project ultimately demonstrates how systematic analysis of racing data can transform raw telemetry into actionable intelligence that advances both competitive performance and spectator understanding of this technologically sophisticated sport.</p>
+                <!-- <p>The implications of this research extend to multiple stakeholders within the Formula 1 ecosystem. For racing teams, insights into tire degradation patterns and optimal compound selection could refine race strategies and improve competitive positioning. For race analysts and commentators, understanding the statistical relationships between performance variables enhances the quality of race coverage and audience engagement. For fans and enthusiasts, data-driven analysis deepens appreciation of the sport by revealing the complex interplay of factors that determine race outcomes beyond what is visible during broadcast coverage. For the broader motorsport community, methodological approaches developed through this analysis contribute to the growing field of sports analytics and demonstrate how advanced data science techniques can extract meaningful insights from complex, high-frequency performance data. The project ultimately demonstrates how systematic analysis of racing data can transform raw telemetry into actionable intelligence that advances both competitive performance and spectator understanding of this technologically sophisticated sport.</p> -->
 
                 <div class="questions-section">
                     <h3>Research Questions</h3>
@@ -447,7 +447,8 @@
                     <h3>Raw Data Sample</h3>
                     <div class="viz-image-container">
                         <div class="viz-placeholder">
-                            [Add screenshot of raw data here]
+                            
+                            <img src="img\raw_img.png" alt="Raw Data Sample">
                         </div>
                     </div>
                     <p>Sample of raw data retrieved from FastF1 API showing lap times, tire information, and performance metrics before cleaning.</p>
@@ -468,7 +469,8 @@
                     <h3>Cleaned Data Sample</h3>
                     <div class="viz-image-container">
                         <div class="viz-placeholder">
-                            [Add screenshot of cleaned data here]
+                            <img src="img\clean_data1.png", alt="Raw Data Sample">
+
                         </div>
                     </div>
                     <p>Cleaned dataset after removing anomalies and handling missing values, ready for analysis.</p>
@@ -487,7 +489,7 @@
                             </p>
                         </div>
                         <div class="viz-image-container">
-                            <div class="viz-placeholder">[Add your visualization here]</div>
+                            <div class="viz-placeholder"> <img src="img\viz1_laptime_distribution.png", alt="Raw Data Sample"></div>
                         </div>
                     </div>
 
@@ -501,7 +503,7 @@
                             </p>
                         </div>
                         <div class="viz-image-container">
-                            <div class="viz-placeholder">[Add your visualization here]</div>
+                            <div class="viz-placeholder"> <img src="img\viz2_avg_laptime_by_race.png", alt="Raw Data Sample"></div>
                         </div>
                     </div>
 
@@ -515,7 +517,7 @@
                             </p>
                         </div>
                         <div class="viz-image-container">
-                            <div class="viz-placeholder">[Add your visualization here]</div>
+                            <div class="viz-placeholder"> <img src="img\viz3_top10_drivers.png", alt="Raw Data Sample"></div>
                         </div>
                     </div>
 
@@ -529,7 +531,7 @@
                             </p>
                         </div>
                         <div class="viz-image-container">
-                            <div class="viz-placeholder">[Add your visualization here]</div>
+                            <div class="viz-placeholder"> <img src="img\viz4_tire_compound_performance.png", alt="Raw Data Sample"></div>
                         </div>
                     </div>
 
@@ -543,7 +545,7 @@
                             </p>
                         </div>
                         <div class="viz-image-container">
-                            <div class="viz-placeholder">[Add your visualization here]</div>
+                            <div class="viz-placeholder"> <img src="img\viz5_tire_degradation.png", alt="Raw Data Sample"></div>
                         </div>
                     </div>
 
@@ -557,7 +559,7 @@
                             </p>
                         </div>
                         <div class="viz-image-container">
-                            <div class="viz-placeholder">[Add your visualization here]</div>
+                            <div class="viz-placeholder"> <img src="img\viz6_race_phase_performance.png", alt="Raw Data Sample"></div>
                         </div>
                     </div>
 
@@ -571,7 +573,7 @@
                             </p>
                         </div>
                         <div class="viz-image-container">
-                            <div class="viz-placeholder">[Add your visualization here]</div>
+                            <div class="viz-placeholder"> <img src="img\viz7_top_speeds.png", alt="Raw Data Sample"></div>
                         </div>
                     </div>
 
@@ -585,7 +587,7 @@
                             </p>
                         </div>
                         <div class="viz-image-container">
-                            <div class="viz-placeholder">[Add your visualization here]</div>
+                            <div class="viz-placeholder"> <img src="img\viz8_correlation_heatmap.png", alt="Raw Data Sample"></div>
                         </div>
                     </div>
 
@@ -599,7 +601,7 @@
                             </p>
                         </div>
                         <div class="viz-image-container">
-                            <div class="viz-placeholder">[Add your visualization here]</div>
+                            <div class="viz-placeholder"> <img src="img\viz9_lap_counts.png", alt="Raw Data Sample"></div>
                         </div>
                     </div>
 
@@ -613,7 +615,7 @@
                             </p>
                         </div>
                         <div class="viz-image-container">
-                            <div class="viz-placeholder">[Add your visualization here]</div>
+                            <div class="viz-placeholder"> <img src="img\viz10_driver_consistency.png", alt="Raw Data Sample"></div>
                         </div>
                     </div>
 
@@ -626,7 +628,7 @@
             <div class="conclusions-content">
                 <h2>Conclusions</h2>
                 
-                <div class="conclusion-placeholder">
+                <!-- <div class="conclusion-placeholder">
                     <p style="color: var(--text); font-style: italic;">
                         The conclusions section will be completed after all analyses are performed in future modules. 
                         This section will synthesize findings in non-technical language, answering the research questions 
@@ -638,19 +640,19 @@
                     This section will provide comprehensive conclusions drawn from the data analysis, presented in accessible, 
                     non-technical language suitable for any reader. The conclusions will address the research questions posed 
                     in the introduction and explain the practical implications of findings for understanding modern Formula 1 racing.
-                </p>
+                </p> -->
             </div>
         </div>
     </main>
 
-    <footer>
+    <!-- <footer>
         <div class="container">
             <div class="footer-content">
                 <p>Formula 1 Data Science Project — 2024 Season Analysis</p>
                 <p style="margin-top: 0.5rem;">Data Source: <a href="https://github.com/theOehrly/Fast-F1" target="_blank" style="color: var(--accent); text-decoration: none;">FastF1 API</a> — Official F1 Live Timing Service</p>
             </div>
         </div>
-    </footer>
+    </footer> -->
 
     <script>
         // Tab Navigation
