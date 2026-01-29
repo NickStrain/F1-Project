@@ -1,0 +1,677 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Formula 1 Data Science Project</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        :root {
+            --primary: #000000;
+            --secondary: #666666;
+            --accent: #E10600;
+            --bg: #FFFFFF;
+            --border: #E5E5E5;
+            --text: #1A1A1A;
+            --text-light: #666666;
+        }
+
+        body {
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+            background: var(--bg);
+            color: var(--text);
+            line-height: 1.6;
+            -webkit-font-smoothing: antialiased;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 2rem;
+        }
+
+        /* Header */
+        header {
+            border-bottom: 1px solid var(--border);
+            padding: 2rem 0;
+            background: var(--bg);
+            position: sticky;
+            top: 0;
+            z-index: 100;
+        }
+
+        h1 {
+            font-size: 2rem;
+            font-weight: 700;
+            color: var(--primary);
+            margin-bottom: 0.5rem;
+        }
+
+        .subtitle {
+            font-size: 1rem;
+            color: var(--text-light);
+            font-weight: 400;
+        }
+
+        /* Tab Navigation */
+        .tab-nav {
+            display: flex;
+            gap: 0;
+            margin-top: 2rem;
+            border-bottom: 1px solid var(--border);
+        }
+
+        .tab-button {
+            font-family: 'Inter', sans-serif;
+            padding: 1rem 2rem;
+            background: transparent;
+            border: none;
+            color: var(--text-light);
+            font-size: 0.95rem;
+            font-weight: 500;
+            cursor: pointer;
+            position: relative;
+            transition: color 0.2s ease;
+            border-bottom: 2px solid transparent;
+        }
+
+        .tab-button:hover {
+            color: var(--primary);
+        }
+
+        .tab-button.active {
+            color: var(--primary);
+            border-bottom-color: var(--accent);
+        }
+
+        /* Tab Content */
+        .tab-content {
+            display: none;
+            padding: 4rem 0;
+        }
+
+        .tab-content.active {
+            display: block;
+        }
+
+        /* Typography */
+        h2 {
+            font-size: 2rem;
+            font-weight: 600;
+            margin-bottom: 1rem;
+            color: var(--primary);
+        }
+
+        h3 {
+            font-size: 1.25rem;
+            font-weight: 600;
+            margin-bottom: 0.75rem;
+            color: var(--primary);
+            margin-top: 2rem;
+        }
+
+        p {
+            color: var(--text-light);
+            margin-bottom: 1.5rem;
+            font-size: 1.05rem;
+            line-height: 1.8;
+        }
+
+        /* Introduction Section */
+        .intro-content {
+            max-width: 900px;
+            margin: 0 auto;
+        }
+
+        .intro-image {
+            width: 100%;
+            margin: 3rem 0;
+            border: 1px solid var(--border);
+            border-radius: 4px;
+            overflow: hidden;
+        }
+
+        .intro-image img {
+            width: 100%;
+            height: auto;
+            display: block;
+        }
+
+        /* Research Questions */
+        .questions-section {
+            margin-top: 4rem;
+        }
+
+        .questions-list {
+            display: flex;
+            flex-direction: column;
+            gap: 1.5rem;
+            margin-top: 2rem;
+        }
+
+        .question-card {
+            border-left: 3px solid var(--border);
+            padding: 1rem 0 1rem 1.5rem;
+            transition: border-color 0.2s ease;
+        }
+
+        .question-card:hover {
+            border-left-color: var(--accent);
+        }
+
+        .question-number {
+            font-size: 0.75rem;
+            color: var(--accent);
+            font-weight: 600;
+            letter-spacing: 1px;
+            text-transform: uppercase;
+            margin-bottom: 0.5rem;
+        }
+
+        .question-text {
+            font-size: 1.05rem;
+            color: var(--primary);
+            line-height: 1.6;
+            font-weight: 500;
+        }
+
+        /* Data Prep Section */
+        .data-prep-content {
+            max-width: 1000px;
+            margin: 0 auto;
+        }
+
+        .data-section {
+            margin-bottom: 4rem;
+        }
+
+        .data-card {
+            padding: 2rem;
+            border: 1px solid var(--border);
+            border-radius: 4px;
+            margin: 2rem 0;
+        }
+
+        /* Visualizations */
+        .visualization-item {
+            margin-bottom: 4rem;
+            padding-bottom: 3rem;
+            border-bottom: 1px solid var(--border);
+        }
+
+        .visualization-item:last-child {
+            border-bottom: none;
+        }
+
+        .viz-header {
+            margin-bottom: 1.5rem;
+        }
+
+        .viz-number {
+            font-size: 0.75rem;
+            color: var(--accent);
+            font-weight: 600;
+            letter-spacing: 1px;
+            text-transform: uppercase;
+            margin-bottom: 0.5rem;
+        }
+
+        .viz-title {
+            font-size: 1.5rem;
+            font-weight: 600;
+            color: var(--primary);
+            margin-bottom: 0.5rem;
+            margin-top: 0;
+        }
+
+        .viz-description {
+            font-size: 1rem;
+            color: var(--text-light);
+            line-height: 1.7;
+        }
+
+        .viz-image-container {
+            width: 100%;
+            margin: 2rem 0;
+            border: 1px solid var(--border);
+            border-radius: 4px;
+            overflow: hidden;
+            background: #f9f9f9;
+        }
+
+        .viz-image-container img {
+            width: 100%;
+            height: auto;
+            display: block;
+        }
+
+        .viz-placeholder {
+            width: 100%;
+            padding: 8rem 2rem;
+            background: #f9f9f9;
+            border: 2px dashed var(--border);
+            border-radius: 4px;
+            text-align: center;
+            color: var(--text-light);
+            font-size: 0.95rem;
+        }
+
+        /* Conclusions */
+        .conclusions-content {
+            max-width: 900px;
+            margin: 0 auto;
+        }
+
+        .conclusion-placeholder {
+            background: #f9f9f9;
+            border-left: 3px solid var(--accent);
+            padding: 2rem;
+            margin: 2rem 0;
+            border-radius: 4px;
+        }
+
+        /* Footer */
+        footer {
+            margin-top: 6rem;
+            padding: 3rem 0;
+            border-top: 1px solid var(--border);
+        }
+
+        .footer-content {
+            text-align: center;
+            color: var(--text-light);
+            font-size: 0.875rem;
+        }
+
+        /* Responsive */
+        @media (max-width: 768px) {
+            h1 {
+                font-size: 1.5rem;
+            }
+
+            h2 {
+                font-size: 1.5rem;
+            }
+
+            .tab-button {
+                padding: 0.75rem 1rem;
+                font-size: 0.875rem;
+            }
+
+            .container {
+                padding: 0 1.5rem;
+            }
+
+            .viz-placeholder {
+                padding: 5rem 1rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <div class="container">
+            <h1>Formula 1 Data Science Project</h1>
+            <p class="subtitle">2024 Season Analysis using FastF1 API</p>
+            <nav class="tab-nav">
+                <button class="tab-button active" data-tab="introduction">Introduction</button>
+                <button class="tab-button" data-tab="data-prep">Data Prep/EDA</button>
+                <button class="tab-button" data-tab="conclusions">Conclusions</button>
+            </nav>
+        </div>
+    </header>
+
+    <main class="container">
+        <!-- INTRODUCTION TAB -->
+        <div id="introduction" class="tab-content active">
+            <div class="intro-content">
+                <h2>Introduction</h2>
+                
+                <p>Formula 1 racing represents the pinnacle of motorsport engineering and athletic performance, where milliseconds determine victory and defeat. The sport combines cutting-edge automotive technology, aerodynamic innovation, strategic decision-making, and human skill at speeds exceeding 350 kilometers per hour. Beyond the spectacle of racing, Formula 1 generates vast amounts of data from telemetry systems, timing sensors, and performance metrics that capture every aspect of car and driver performance. This data provides unprecedented opportunities to understand the factors that influence race outcomes, optimize team strategies, and predict competitive dynamics. The intersection of data science and motorsport has transformed how teams approach race preparation, real-time decision-making, and long-term development, making Formula 1 one of the most data-intensive sports in the world. Each Grand Prix weekend produces millions of data points from practice sessions, qualifying rounds, and race day, creating a rich analytical landscape for exploring performance patterns, technological advantages, and competitive strategies.</p>
+
+                <p>The significance of data analysis in Formula 1 extends beyond team operations to influence regulatory decisions, broadcast coverage, and fan engagement. Teams invest heavily in data infrastructure, employing hundreds of engineers and analysts who process telemetry data in real-time during races and conduct detailed post-race analysis to gain competitive advantages. Race strategy decisions regarding tire compounds, pit stop timing, fuel loads, and overtaking opportunities increasingly rely on sophisticated predictive models that synthesize historical performance data, real-time conditions, and competitor behavior. The sport's technical regulations evolve annually, creating new challenges and opportunities for teams to exploit data-driven insights in car development and race execution. Furthermore, the global nature of Formula 1, with races held across diverse circuits ranging from high-speed tracks like Monza to technical street circuits like Monaco, produces varied performance characteristics that demand adaptive analytical approaches. Understanding these patterns through comprehensive data analysis reveals how track characteristics, weather conditions, tire management, and technical innovations interact to determine competitive outcomes.</p>
+
+                <div class="intro-image">
+                    <img src="img\ferrari car.jpg" alt="Formula 1 Racing">
+                </div>
+
+                <p>Current research in Formula 1 data science has explored various dimensions of race performance, including lap time prediction, optimal pit stop strategies, tire degradation modeling, and driver performance evaluation. Academic studies have applied machine learning techniques to predict race winners, classify driver skill levels, and optimize team strategies based on historical data patterns. Industry practitioners have developed sophisticated simulation tools that model race scenarios, enabling teams to test strategic options before making critical decisions during live races. The availability of public timing data through official channels and community-developed APIs like FastF1 has democratized access to Formula 1 telemetry, enabling researchers and enthusiasts to conduct independent analyses and develop innovative analytical methodologies. Despite these advances, significant opportunities remain to deepen understanding of performance factors, particularly in areas such as tire compound selection under varying conditions, the impact of aerodynamic regulations on competitive balance, and the quantification of driver contributions relative to car performance.</p>
+
+                <p>This data science project investigates Formula 1 racing performance through comprehensive analysis of the 2024 season, focusing on lap times, tire strategies, driver performance, and race dynamics across multiple Grand Prix events. The analysis examines how various factors including tire compound selection, tire degradation over race distance, track characteristics, and race phase influence lap time performance and competitive outcomes. By gathering and analyzing official timing data, this research seeks to uncover patterns in racing performance that enhance understanding of competitive dynamics. The project utilizes data gathered through the FastF1 API, which provides access to official Formula 1 timing data including lap times, sector times, speed measurements, tire information, and race positions, creating a robust foundation for multi-dimensional analysis.</p>
+
+                <!-- <p>The implications of this research extend to multiple stakeholders within the Formula 1 ecosystem. For racing teams, insights into tire degradation patterns and optimal compound selection could refine race strategies and improve competitive positioning. For race analysts and commentators, understanding the statistical relationships between performance variables enhances the quality of race coverage and audience engagement. For fans and enthusiasts, data-driven analysis deepens appreciation of the sport by revealing the complex interplay of factors that determine race outcomes beyond what is visible during broadcast coverage. For the broader motorsport community, methodological approaches developed through this analysis contribute to the growing field of sports analytics and demonstrate how advanced data science techniques can extract meaningful insights from complex, high-frequency performance data. The project ultimately demonstrates how systematic analysis of racing data can transform raw telemetry into actionable intelligence that advances both competitive performance and spectator understanding of this technologically sophisticated sport.</p> -->
+
+                <div class="questions-section">
+                    <h3>Research Questions</h3>
+                    <div class="questions-list">
+                        <div class="question-card">
+                            <div class="question-number">Question 01</div>
+                            <p class="question-text">
+                                How do different tire compounds affect lap time performance across various circuit types?
+                            </p>
+                        </div>
+
+                        <div class="question-card">
+                            <div class="question-number">Question 02</div>
+                            <p class="question-text">
+                                What is the relationship between tire age and lap time degradation during race conditions?
+                            </p>
+                        </div>
+
+                        <div class="question-card">
+                            <div class="question-number">Question 03</div>
+                            <p class="question-text">
+                                Which drivers demonstrate the most consistent lap time performance throughout the season?
+                            </p>
+                        </div>
+
+                        <div class="question-card">
+                            <div class="question-number">Question 04</div>
+                            <p class="question-text">
+                                How do track characteristics influence average race pace and lap time distributions?
+                            </p>
+                        </div>
+
+                        <div class="question-card">
+                            <div class="question-number">Question 05</div>
+                            <p class="question-text">
+                                Can patterns in tire degradation help predict optimal pit stop timing?
+                            </p>
+                        </div>
+
+                        <div class="question-card">
+                            <div class="question-number">Question 06</div>
+                            <p class="question-text">
+                                What factors most strongly correlate with achieving competitive lap times?
+                            </p>
+                        </div>
+
+                        <div class="question-card">
+                            <div class="question-number">Question 07</div>
+                            <p class="question-text">
+                                How does performance in different race phases vary across teams and drivers?
+                            </p>
+                        </div>
+
+                        <div class="question-card">
+                            <div class="question-number">Question 08</div>
+                            <p class="question-text">
+                                What patterns emerge when analyzing speed trap data and straight-line performance?
+                            </p>
+                        </div>
+
+                        <div class="question-card">
+                            <div class="question-number">Question 09</div>
+                            <p class="question-text">
+                                How do sector times reveal strengths and weaknesses across different circuit sections?
+                            </p>
+                        </div>
+
+                        <div class="question-card">
+                            <div class="question-number">Question 10</div>
+                            <p class="question-text">
+                                What relationships exist between lap number, tire condition, and performance metrics?
+                            </p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- DATA PREP/EDA TAB -->
+        <div id="data-prep" class="tab-content">
+            <div class="data-prep-content">
+                <h2>Data Preparation & Exploratory Data Analysis</h2>
+
+                <div class="data-section">
+                    <h3>Data Collection</h3>
+                    
+                    <div class="data-card">
+                        <h3>FastF1 API</h3>
+                        <p>Data for this project was gathered using the FastF1 Python library, which provides programmatic access to official Formula 1 timing data. FastF1 retrieves data from the F1 live timing service, offering comprehensive telemetry information including lap times, sector times, speed measurements, tire data, and positional information.</p>
+                        
+                        <p><strong>API Website:</strong> <a href="https://github.com/theOehrly/Fast-F1" target="_blank" style="color: var(--accent); text-decoration: none;">https://github.com/theOehrly/Fast-F1</a></p>
+
+                        <p><strong>Races Analyzed:</strong> Bahrain, Saudi Arabia, Australia, Japan, Monaco (2024 Season)</p>
+                        <p><strong>Data Types:</strong> Lap times, sector times, speed measurements, tire compounds, tire age, race positions</p>
+                    </div>
+                </div>
+
+                <div class="data-section">
+                    <h3>Raw Data Sample</h3>
+                    <div class="viz-image-container">
+                        <div class="viz-placeholder">
+                            
+                            <img src="img\raw_img.png" alt="Raw Data Sample">
+                        </div>
+                    </div>
+                    <p>Sample of raw data retrieved from FastF1 API showing lap times, tire information, and performance metrics before cleaning.</p>
+                </div>
+
+                <div class="data-section">
+                    <h3>Data Cleaning Process</h3>
+                    <p>The data cleaning process involved several critical steps to ensure data quality:</p>
+                    
+                    <div class="data-card">
+                        <p><strong>Missing Value Treatment:</strong> Removed rows with missing critical lap time data</p>
+                        <p><strong>Outlier Removal:</strong> Filtered out anomalous laps (>200 seconds) likely representing pit stops or incidents</p>
+                        <p><strong>Sector Time Imputation:</strong> Filled missing sector times using median values grouped by driver and track</p>
+                        <p><strong>Speed Data Handling:</strong> Imputed missing speed trap measurements using driver-track medians</p>
+                        <p><strong>Feature Engineering:</strong> Created derived features including lap phase, average speed, and tire freshness indicators</p>
+                    </div>
+
+                    <h3>Cleaned Data Sample</h3>
+                    <div class="viz-image-container">
+                        <div class="viz-placeholder">
+                            <img src="img\clean_data1.png", alt="Raw Data Sample">
+
+                        </div>
+                    </div>
+                    <p>Cleaned dataset after removing anomalies and handling missing values, ready for analysis.</p>
+                </div>
+
+                <div class="data-section">
+                    <h3>Exploratory Data Analysis - Visualizations</h3>
+                    
+                    <!-- Visualization 1 -->
+                    <div class="visualization-item">
+                        <div class="viz-header">
+                            <div class="viz-number">Visualization 01</div>
+                            <h3 class="viz-title">Distribution of Lap Times</h3>
+                            <p class="viz-description">
+                                Histogram showing the distribution of lap times across all analyzed races, revealing typical race pace patterns.
+                            </p>
+                        </div>
+                        <div class="viz-image-container">
+                            <div class="viz-placeholder"> <img src="img\viz1_laptime_distribution.png", alt="Raw Data Sample"></div>
+                        </div>
+                    </div>
+
+                    <!-- Visualization 2 -->
+                    <div class="visualization-item">
+                        <div class="viz-header">
+                            <div class="viz-number">Visualization 02</div>
+                            <h3 class="viz-title">Average Lap Times by Race</h3>
+                            <p class="viz-description">
+                                Comparison of average lap times across different Grand Prix circuits showing track characteristic variations.
+                            </p>
+                        </div>
+                        <div class="viz-image-container">
+                            <div class="viz-placeholder"> <img src="img\viz2_avg_laptime_by_race.png", alt="Raw Data Sample"></div>
+                        </div>
+                    </div>
+
+                    <!-- Visualization 3 -->
+                    <div class="visualization-item">
+                        <div class="viz-header">
+                            <div class="viz-number">Visualization 03</div>
+                            <h3 class="viz-title">Top Drivers by Average Lap Time</h3>
+                            <p class="viz-description">
+                                Analysis of the ten drivers with the fastest average lap times throughout the analyzed races.
+                            </p>
+                        </div>
+                        <div class="viz-image-container">
+                            <div class="viz-placeholder"> <img src="img\viz3_top10_drivers.png", alt="Raw Data Sample"></div>
+                        </div>
+                    </div>
+
+                    <!-- Visualization 4 -->
+                    <div class="visualization-item">
+                        <div class="viz-header">
+                            <div class="viz-number">Visualization 04</div>
+                            <h3 class="viz-title">Tire Compound Performance</h3>
+                            <p class="viz-description">
+                                Box plot comparing lap time distributions across different tire compounds (Soft, Medium, Hard).
+                            </p>
+                        </div>
+                        <div class="viz-image-container">
+                            <div class="viz-placeholder"> <img src="img\viz4_tire_compound_performance.png", alt="Raw Data Sample"></div>
+                        </div>
+                    </div>
+
+                    <!-- Visualization 5 -->
+                    <div class="visualization-item">
+                        <div class="viz-header">
+                            <div class="viz-number">Visualization 05</div>
+                            <h3 class="viz-title">Tire Degradation Analysis</h3>
+                            <p class="viz-description">
+                                Line graph showing how lap times increase as tires age, demonstrating performance degradation over stint length.
+                            </p>
+                        </div>
+                        <div class="viz-image-container">
+                            <div class="viz-placeholder"> <img src="img\viz5_tire_degradation.png", alt="Raw Data Sample"></div>
+                        </div>
+                    </div>
+
+                    <!-- Visualization 6 -->
+                    <div class="visualization-item">
+                        <div class="viz-header">
+                            <div class="viz-number">Visualization 06</div>
+                            <h3 class="viz-title">Race Phase Performance</h3>
+                            <p class="viz-description">
+                                Comparison of lap times during early, mid, and late race phases showing strategic variations.
+                            </p>
+                        </div>
+                        <div class="viz-image-container">
+                            <div class="viz-placeholder"> <img src="img\viz6_race_phase_performance.png", alt="Raw Data Sample"></div>
+                        </div>
+                    </div>
+
+                    <!-- Visualization 7 -->
+                    <div class="visualization-item">
+                        <div class="viz-header">
+                            <div class="viz-number">Visualization 07</div>
+                            <h3 class="viz-title">Speed Trap Analysis</h3>
+                            <p class="viz-description">
+                                Analysis of maximum speeds recorded at speed trap locations revealing straight-line performance.
+                            </p>
+                        </div>
+                        <div class="viz-image-container">
+                            <div class="viz-placeholder"> <img src="img\viz7_top_speeds.png", alt="Raw Data Sample"></div>
+                        </div>
+                    </div>
+
+                    <!-- Visualization 8 -->
+                    <div class="visualization-item">
+                        <div class="viz-header">
+                            <div class="viz-number">Visualization 08</div>
+                            <h3 class="viz-title">Correlation Heatmap</h3>
+                            <p class="viz-description">
+                                Heatmap showing correlations between key performance variables including lap time, speed, and tire age.
+                            </p>
+                        </div>
+                        <div class="viz-image-container">
+                            <div class="viz-placeholder"> <img src="img\viz8_correlation_heatmap.png", alt="Raw Data Sample"></div>
+                        </div>
+                    </div>
+
+                    <!-- Visualization 9 -->
+                    <div class="visualization-item">
+                        <div class="viz-header">
+                            <div class="viz-number">Visualization 09</div>
+                            <h3 class="viz-title">Lap Count Distribution</h3>
+                            <p class="viz-description">
+                                Total laps completed by each driver showing participation and reliability across races.
+                            </p>
+                        </div>
+                        <div class="viz-image-container">
+                            <div class="viz-placeholder"> <img src="img\viz9_lap_counts.png", alt="Raw Data Sample"></div>
+                        </div>
+                    </div>
+
+                    <!-- Visualization 10 -->
+                    <div class="visualization-item">
+                        <div class="viz-header">
+                            <div class="viz-number">Visualization 10</div>
+                            <h3 class="viz-title">Driver Consistency Analysis</h3>
+                            <p class="viz-description">
+                                Analysis of lap time consistency showing drivers with lowest standard deviation in performance.
+                            </p>
+                        </div>
+                        <div class="viz-image-container">
+                            <div class="viz-placeholder"> <img src="img\viz10_driver_consistency.png", alt="Raw Data Sample"></div>
+                        </div>
+                    </div>
+
+                </div>
+            </div>
+        </div>
+
+        <!-- CONCLUSIONS TAB -->
+        <div id="conclusions" class="tab-content">
+            <div class="conclusions-content">
+                <h2>Conclusions</h2>
+                
+                <!-- <div class="conclusion-placeholder">
+                    <p style="color: var(--text); font-style: italic;">
+                        The conclusions section will be completed after all analyses are performed in future modules. 
+                        This section will synthesize findings in non-technical language, answering the research questions 
+                        and providing actionable insights about Formula 1 racing performance, tire strategies, and competitive dynamics.
+                    </p>
+                </div>
+
+                <p>
+                    This section will provide comprehensive conclusions drawn from the data analysis, presented in accessible, 
+                    non-technical language suitable for any reader. The conclusions will address the research questions posed 
+                    in the introduction and explain the practical implications of findings for understanding modern Formula 1 racing.
+                </p> -->
+            </div>
+        </div>
+    </main>
+
+    <!-- <footer>
+        <div class="container">
+            <div class="footer-content">
+                <p>Formula 1 Data Science Project — 2024 Season Analysis</p>
+                <p style="margin-top: 0.5rem;">Data Source: <a href="https://github.com/theOehrly/Fast-F1" target="_blank" style="color: var(--accent); text-decoration: none;">FastF1 API</a> — Official F1 Live Timing Service</p>
+            </div>
+        </div>
+    </footer> -->
+
+    <script>
+        // Tab Navigation
+        const tabButtons = document.querySelectorAll('.tab-button');
+        const tabContents = document.querySelectorAll('.tab-content');
+
+        tabButtons.forEach(button => {
+            button.addEventListener('click', () => {
+                const tabName = button.getAttribute('data-tab');
+                
+                tabButtons.forEach(btn => btn.classList.remove('active'));
+                tabContents.forEach(content => content.classList.remove('active'));
+                
+                button.classList.add('active');
+                document.getElementById(tabName).classList.add('active');
+
+                window.scrollTo({ top: 0, behavior: 'smooth' });
+            });
+        });
+    </script>
+</body>
+</html>
