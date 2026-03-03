@@ -291,26 +291,11 @@
 
         /* Responsive */
         @media (max-width: 768px) {
-            h1 {
-                font-size: 1.5rem;
-            }
-
-            h2 {
-                font-size: 1.5rem;
-            }
-
-            .tab-button {
-                padding: 0.75rem 1rem;
-                font-size: 0.875rem;
-            }
-
-            .container {
-                padding: 0 1.5rem;
-            }
-
-            .viz-placeholder {
-                padding: 5rem 1rem;
-            }
+            h1 { font-size: 1.5rem; }
+            h2 { font-size: 1.5rem; }
+            .tab-button { padding: 0.75rem 1rem; font-size: 0.875rem; }
+            .container { padding: 0 1.5rem; }
+            .viz-placeholder { padding: 5rem 1rem; }
         }
     </style>
 </head>
@@ -322,17 +307,21 @@
             <nav class="tab-nav">
                 <button class="tab-button active" data-tab="introduction">Introduction</button>
                 <button class="tab-button" data-tab="data-prep">Data Prep/EDA</button>
+                <button class="tab-button" data-tab="pca">PCA</button>
+                <button class="tab-button" data-tab="clustering">Clustering</button>
+                <button class="tab-button" data-tab="arm">ARM</button>
                 <button class="tab-button" data-tab="conclusions">Conclusions</button>
             </nav>
         </div>
     </header>
 
     <main class="container">
+
         <!-- INTRODUCTION TAB -->
         <div id="introduction" class="tab-content active">
             <div class="intro-content">
                 <h2>Introduction</h2>
-                
+
                 <p>Formula 1 racing represents the pinnacle of motorsport engineering and athletic performance, where milliseconds determine victory and defeat. The sport combines cutting-edge automotive technology, aerodynamic innovation, strategic decision-making, and human skill at speeds exceeding 350 kilometers per hour. Beyond the spectacle of racing, Formula 1 generates vast amounts of data from telemetry systems, timing sensors, and performance metrics that capture every aspect of car and driver performance. This data provides unprecedented opportunities to understand the factors that influence race outcomes, optimize team strategies, and predict competitive dynamics. The intersection of data science and motorsport has transformed how teams approach race preparation, real-time decision-making, and long-term development, making Formula 1 one of the most data-intensive sports in the world. Each Grand Prix weekend produces millions of data points from practice sessions, qualifying rounds, and race day, creating a rich analytical landscape for exploring performance patterns, technological advantages, and competitive strategies.</p>
 
                 <p>The significance of data analysis in Formula 1 extends beyond team operations to influence regulatory decisions, broadcast coverage, and fan engagement. Teams invest heavily in data infrastructure, employing hundreds of engineers and analysts who process telemetry data in real-time during races and conduct detailed post-race analysis to gain competitive advantages. Race strategy decisions regarding tire compounds, pit stop timing, fuel loads, and overtaking opportunities increasingly rely on sophisticated predictive models that synthesize historical performance data, real-time conditions, and competitor behavior. The sport's technical regulations evolve annually, creating new challenges and opportunities for teams to exploit data-driven insights in car development and race execution. Furthermore, the global nature of Formula 1, with races held across diverse circuits ranging from high-speed tracks like Monza to technical street circuits like Monaco, produces varied performance characteristics that demand adaptive analytical approaches. Understanding these patterns through comprehensive data analysis reveals how track characteristics, weather conditions, tire management, and technical innovations interact to determine competitive outcomes.</p>
@@ -345,79 +334,54 @@
 
                 <p>This data science project investigates Formula 1 racing performance through comprehensive analysis of the 2024 season, focusing on lap times, tire strategies, driver performance, and race dynamics across multiple Grand Prix events. The analysis examines how various factors including tire compound selection, tire degradation over race distance, track characteristics, and race phase influence lap time performance and competitive outcomes. By gathering and analyzing official timing data, this research seeks to uncover patterns in racing performance that enhance understanding of competitive dynamics. The project utilizes data gathered through the FastF1 API, which provides access to official Formula 1 timing data including lap times, sector times, speed measurements, tire information, and race positions, creating a robust foundation for multi-dimensional analysis.</p>
 
-                <!-- <p>The implications of this research extend to multiple stakeholders within the Formula 1 ecosystem. For racing teams, insights into tire degradation patterns and optimal compound selection could refine race strategies and improve competitive positioning. For race analysts and commentators, understanding the statistical relationships between performance variables enhances the quality of race coverage and audience engagement. For fans and enthusiasts, data-driven analysis deepens appreciation of the sport by revealing the complex interplay of factors that determine race outcomes beyond what is visible during broadcast coverage. For the broader motorsport community, methodological approaches developed through this analysis contribute to the growing field of sports analytics and demonstrate how advanced data science techniques can extract meaningful insights from complex, high-frequency performance data. The project ultimately demonstrates how systematic analysis of racing data can transform raw telemetry into actionable intelligence that advances both competitive performance and spectator understanding of this technologically sophisticated sport.</p> -->
+                <p>Building on the exploratory analysis established in Module 1, this project now applies three advanced machine learning techniques to extract deeper insights from the data. Principal Component Analysis (PCA) is used to reduce dimensionality and identify the most important performance variables. Clustering methods — KMeans, Hierarchical, and DBSCAN — reveal natural groupings within lap data that illuminate strategic and performance patterns. Association Rule Mining (ARM) uncovers co-occurring strategic events across laps, revealing the hidden logic of tire strategy and race phase decisions. Together, these methods transform raw telemetry into actionable intelligence about what truly drives competitive outcomes in Formula 1.</p>
+
+                <div class="intro-image">
+                    <img src="img\viz8_correlation_heatmap.png" alt="Correlation Heatmap of F1 Performance Variables">
+                </div>
 
                 <div class="questions-section">
                     <h3>Research Questions</h3>
                     <div class="questions-list">
                         <div class="question-card">
                             <div class="question-number">Question 01</div>
-                            <p class="question-text">
-                                How do different tire compounds affect lap time performance across various circuit types?
-                            </p>
+                            <p class="question-text">How do different tire compounds affect lap time performance across various circuit types?</p>
                         </div>
-
                         <div class="question-card">
                             <div class="question-number">Question 02</div>
-                            <p class="question-text">
-                                What is the relationship between tire age and lap time degradation during race conditions?
-                            </p>
+                            <p class="question-text">What is the relationship between tire age and lap time degradation during race conditions?</p>
                         </div>
-
                         <div class="question-card">
                             <div class="question-number">Question 03</div>
-                            <p class="question-text">
-                                Which drivers demonstrate the most consistent lap time performance throughout the season?
-                            </p>
+                            <p class="question-text">Which drivers demonstrate the most consistent lap time performance throughout the season?</p>
                         </div>
-
                         <div class="question-card">
                             <div class="question-number">Question 04</div>
-                            <p class="question-text">
-                                How do track characteristics influence average race pace and lap time distributions?
-                            </p>
+                            <p class="question-text">How do track characteristics influence average race pace and lap time distributions?</p>
                         </div>
-
                         <div class="question-card">
                             <div class="question-number">Question 05</div>
-                            <p class="question-text">
-                                Can patterns in tire degradation help predict optimal pit stop timing?
-                            </p>
+                            <p class="question-text">Can patterns in tire degradation help predict optimal pit stop timing?</p>
                         </div>
-
                         <div class="question-card">
                             <div class="question-number">Question 06</div>
-                            <p class="question-text">
-                                What factors most strongly correlate with achieving competitive lap times?
-                            </p>
+                            <p class="question-text">What factors most strongly correlate with achieving competitive lap times?</p>
                         </div>
-
                         <div class="question-card">
                             <div class="question-number">Question 07</div>
-                            <p class="question-text">
-                                How does performance in different race phases vary across teams and drivers?
-                            </p>
+                            <p class="question-text">How does performance in different race phases vary across teams and drivers?</p>
                         </div>
-
                         <div class="question-card">
                             <div class="question-number">Question 08</div>
-                            <p class="question-text">
-                                What patterns emerge when analyzing speed trap data and straight-line performance?
-                            </p>
+                            <p class="question-text">What patterns emerge when analyzing speed trap data and straight-line performance?</p>
                         </div>
-
                         <div class="question-card">
                             <div class="question-number">Question 09</div>
-                            <p class="question-text">
-                                How do sector times reveal strengths and weaknesses across different circuit sections?
-                            </p>
+                            <p class="question-text">How do sector times reveal strengths and weaknesses across different circuit sections?</p>
                         </div>
-
                         <div class="question-card">
                             <div class="question-number">Question 10</div>
-                            <p class="question-text">
-                                What relationships exist between lap number, tire condition, and performance metrics?
-                            </p>
+                            <p class="question-text">What relationships exist between lap number, tire condition, and performance metrics?</p>
                         </div>
                     </div>
                 </div>
@@ -431,13 +395,10 @@
 
                 <div class="data-section">
                     <h3>Data Collection</h3>
-                    
                     <div class="data-card">
                         <h3>FastF1 API</h3>
                         <p>Data for this project was gathered using the FastF1 Python library, which provides programmatic access to official Formula 1 timing data. FastF1 retrieves data from the F1 live timing service, offering comprehensive telemetry information including lap times, sector times, speed measurements, tire data, and positional information.</p>
-                        
                         <p><strong>API Website:</strong> <a href="https://github.com/theOehrly/Fast-F1" target="_blank" style="color: var(--accent); text-decoration: none;">https://github.com/theOehrly/Fast-F1</a></p>
-
                         <p><strong>Races Analyzed:</strong> Bahrain, Saudi Arabia, Australia, Japan, Monaco (2024 Season)</p>
                         <p><strong>Data Types:</strong> Lap times, sector times, speed measurements, tire compounds, tire age, race positions</p>
                     </div>
@@ -447,7 +408,6 @@
                     <h3>Raw Data Sample</h3>
                     <div class="viz-image-container">
                         <div class="viz-placeholder">
-                            
                             <img src="img\raw_img.png" alt="Raw Data Sample">
                         </div>
                     </div>
@@ -457,7 +417,6 @@
                 <div class="data-section">
                     <h3>Data Cleaning Process</h3>
                     <p>The data cleaning process involved several critical steps to ensure data quality:</p>
-                    
                     <div class="data-card">
                         <p><strong>Missing Value Treatment:</strong> Removed rows with missing critical lap time data</p>
                         <p><strong>Outlier Removal:</strong> Filtered out anomalous laps (>200 seconds) likely representing pit stops or incidents</p>
@@ -469,8 +428,7 @@
                     <h3>Cleaned Data Sample</h3>
                     <div class="viz-image-container">
                         <div class="viz-placeholder">
-                            <img src="/img/clean_data1.png", alt="Raw Data Sample">
-
+                            <img src="/img/clean_data1.png" alt="Raw Data Sample">
                         </div>
                     </div>
                     <p>Cleaned dataset after removing anomalies and handling missing values, ready for analysis.</p>
@@ -478,148 +436,541 @@
 
                 <div class="data-section">
                     <h3>Exploratory Data Analysis - Visualizations</h3>
-                    
-                    <!-- Visualization 1 -->
+
                     <div class="visualization-item">
                         <div class="viz-header">
                             <div class="viz-number">Visualization 01</div>
                             <h3 class="viz-title">Distribution of Lap Times</h3>
-                            <p class="viz-description">
-                                Histogram showing the distribution of lap times across all analyzed races, revealing typical race pace patterns.
-                            </p>
+                            <p class="viz-description">Histogram showing the distribution of lap times across all analyzed races, revealing typical race pace patterns.</p>
                         </div>
                         <div class="viz-image-container">
-                            <div class="viz-placeholder"> <img src="img\viz1_laptime_distribution.png", alt="Raw Data Sample"></div>
+                            <div class="viz-placeholder"><img src="img\viz1_laptime_distribution.png" alt="Raw Data Sample"></div>
                         </div>
                     </div>
 
-                    <!-- Visualization 2 -->
                     <div class="visualization-item">
                         <div class="viz-header">
                             <div class="viz-number">Visualization 02</div>
                             <h3 class="viz-title">Average Lap Times by Race</h3>
-                            <p class="viz-description">
-                                Comparison of average lap times across different Grand Prix circuits showing track characteristic variations.
-                            </p>
+                            <p class="viz-description">Comparison of average lap times across different Grand Prix circuits showing track characteristic variations.</p>
                         </div>
                         <div class="viz-image-container">
-                            <div class="viz-placeholder"> <img src="img\viz2_avg_laptime_by_race.png", alt="Raw Data Sample"></div>
+                            <div class="viz-placeholder"><img src="img\viz2_avg_laptime_by_race.png" alt="Raw Data Sample"></div>
                         </div>
                     </div>
 
-                    <!-- Visualization 3 -->
                     <div class="visualization-item">
                         <div class="viz-header">
                             <div class="viz-number">Visualization 03</div>
                             <h3 class="viz-title">Top Drivers by Average Lap Time</h3>
-                            <p class="viz-description">
-                                Analysis of the ten drivers with the fastest average lap times throughout the analyzed races.
-                            </p>
+                            <p class="viz-description">Analysis of the ten drivers with the fastest average lap times throughout the analyzed races.</p>
                         </div>
                         <div class="viz-image-container">
-                            <div class="viz-placeholder"> <img src="img\viz3_top10_drivers.png", alt="Raw Data Sample"></div>
+                            <div class="viz-placeholder"><img src="img\viz3_top10_drivers.png" alt="Raw Data Sample"></div>
                         </div>
                     </div>
 
-                    <!-- Visualization 4 -->
                     <div class="visualization-item">
                         <div class="viz-header">
                             <div class="viz-number">Visualization 04</div>
                             <h3 class="viz-title">Tire Compound Performance</h3>
-                            <p class="viz-description">
-                                Box plot comparing lap time distributions across different tire compounds (Soft, Medium, Hard).
-                            </p>
+                            <p class="viz-description">Box plot comparing lap time distributions across different tire compounds (Soft, Medium, Hard).</p>
                         </div>
                         <div class="viz-image-container">
-                            <div class="viz-placeholder"> <img src="img\viz4_tire_compound_performance.png", alt="Raw Data Sample"></div>
+                            <div class="viz-placeholder"><img src="img\viz4_tire_compound_performance.png" alt="Raw Data Sample"></div>
                         </div>
                     </div>
 
-                    <!-- Visualization 5 -->
                     <div class="visualization-item">
                         <div class="viz-header">
                             <div class="viz-number">Visualization 05</div>
                             <h3 class="viz-title">Tire Degradation Analysis</h3>
-                            <p class="viz-description">
-                                Line graph showing how lap times increase as tires age, demonstrating performance degradation over stint length.
-                            </p>
+                            <p class="viz-description">Line graph showing how lap times increase as tires age, demonstrating performance degradation over stint length.</p>
                         </div>
                         <div class="viz-image-container">
-                            <div class="viz-placeholder"> <img src="img\viz5_tire_degradation.png", alt="Raw Data Sample"></div>
+                            <div class="viz-placeholder"><img src="img\viz5_tire_degradation.png" alt="Raw Data Sample"></div>
                         </div>
                     </div>
 
-                    <!-- Visualization 6 -->
                     <div class="visualization-item">
                         <div class="viz-header">
                             <div class="viz-number">Visualization 06</div>
                             <h3 class="viz-title">Race Phase Performance</h3>
-                            <p class="viz-description">
-                                Comparison of lap times during early, mid, and late race phases showing strategic variations.
-                            </p>
+                            <p class="viz-description">Comparison of lap times during early, mid, and late race phases showing strategic variations.</p>
                         </div>
                         <div class="viz-image-container">
-                            <div class="viz-placeholder"> <img src="img\viz6_race_phase_performance.png", alt="Raw Data Sample"></div>
+                            <div class="viz-placeholder"><img src="img\viz6_race_phase_performance.png" alt="Raw Data Sample"></div>
                         </div>
                     </div>
 
-                    <!-- Visualization 7 -->
                     <div class="visualization-item">
                         <div class="viz-header">
                             <div class="viz-number">Visualization 07</div>
                             <h3 class="viz-title">Speed Trap Analysis</h3>
-                            <p class="viz-description">
-                                Analysis of maximum speeds recorded at speed trap locations revealing straight-line performance.
-                            </p>
+                            <p class="viz-description">Analysis of maximum speeds recorded at speed trap locations revealing straight-line performance.</p>
                         </div>
                         <div class="viz-image-container">
-                            <div class="viz-placeholder"> <img src="img\viz7_top_speeds.png", alt="Raw Data Sample"></div>
+                            <div class="viz-placeholder"><img src="img\viz7_top_speeds.png" alt="Raw Data Sample"></div>
                         </div>
                     </div>
 
-                    <!-- Visualization 8 -->
                     <div class="visualization-item">
                         <div class="viz-header">
                             <div class="viz-number">Visualization 08</div>
                             <h3 class="viz-title">Correlation Heatmap</h3>
-                            <p class="viz-description">
-                                Heatmap showing correlations between key performance variables including lap time, speed, and tire age.
-                            </p>
+                            <p class="viz-description">Heatmap showing correlations between key performance variables including lap time, speed, and tire age.</p>
                         </div>
                         <div class="viz-image-container">
-                            <div class="viz-placeholder"> <img src="img\viz8_correlation_heatmap.png", alt="Raw Data Sample"></div>
+                            <div class="viz-placeholder"><img src="img\viz8_correlation_heatmap.png" alt="Raw Data Sample"></div>
                         </div>
                     </div>
 
-                    <!-- Visualization 9 -->
                     <div class="visualization-item">
                         <div class="viz-header">
                             <div class="viz-number">Visualization 09</div>
                             <h3 class="viz-title">Lap Count Distribution</h3>
-                            <p class="viz-description">
-                                Total laps completed by each driver showing participation and reliability across races.
-                            </p>
+                            <p class="viz-description">Total laps completed by each driver showing participation and reliability across races.</p>
                         </div>
                         <div class="viz-image-container">
-                            <div class="viz-placeholder"> <img src="img\viz9_lap_counts.png", alt="Raw Data Sample"></div>
+                            <div class="viz-placeholder"><img src="img\viz9_lap_counts.png" alt="Raw Data Sample"></div>
                         </div>
                     </div>
 
-                    <!-- Visualization 10 -->
                     <div class="visualization-item">
                         <div class="viz-header">
                             <div class="viz-number">Visualization 10</div>
                             <h3 class="viz-title">Driver Consistency Analysis</h3>
-                            <p class="viz-description">
-                                Analysis of lap time consistency showing drivers with lowest standard deviation in performance.
-                            </p>
+                            <p class="viz-description">Analysis of lap time consistency showing drivers with lowest standard deviation in performance.</p>
                         </div>
                         <div class="viz-image-container">
-                            <div class="viz-placeholder"> <img src="/img/viz10_driver_consistency.png", alt="Raw Data Sample"></div>
+                            <div class="viz-placeholder"><img src="/img/viz10_driver_consistency.png" alt="Raw Data Sample"></div>
                         </div>
                     </div>
 
                 </div>
+            </div>
+        </div>
+
+        <!-- PCA TAB -->
+        <div id="pca" class="tab-content">
+            <div class="data-prep-content">
+                <h2>Principal Component Analysis (PCA)</h2>
+
+                <div class="data-section">
+                    <h3>What is PCA?</h3>
+                    <p>Principal Component Analysis (PCA) is an unsupervised dimensionality reduction technique that transforms high-dimensional data into a lower-dimensional space while retaining as much variance (information) as possible. PCA works by identifying the directions — called principal components — along which the data varies the most. These directions are the eigenvectors of the covariance matrix of the standardized data, and the corresponding eigenvalues indicate how much variance each component captures. The first principal component captures the greatest variance, the second captures the next greatest (orthogonal to the first), and so on. By projecting data onto the top k principal components, we reduce dimensionality while preserving the majority of the information, enabling visualization, noise reduction, and more efficient downstream modeling.</p>
+                </div>
+
+                <div class="data-section">
+                    <h3>Dataset Used for PCA</h3>
+                    <p>The cleaned F1 lap data file <strong>f1_pca_data_clean.csv</strong> was used. It contains only quantitative features; all qualitative columns (Driver name, Team, Compound label) were removed before analysis. Features included: LapTime_sec, Sector1Time_sec, Sector2Time_sec, Sector3Time_sec, SpeedI1, SpeedI2, SpeedFL, SpeedST, and TyreLife.</p>
+                    <div class="data-card">
+                        <p><strong>Source:</strong> <a href="https://github.com/theOehrly/Fast-F1" target="_blank" style="color: var(--accent); text-decoration: none;">FastF1 API — github.com/theOehrly/Fast-F1</a></p>
+                        <p><strong>Races:</strong> Bahrain, Saudi Arabia, Australia, Japan, Monaco (2024 Season)</p>
+                        <p><strong>Features kept for PCA:</strong> LapTime_sec, Sector1Time_sec, Sector2Time_sec, Sector3Time_sec, SpeedI1, SpeedI2, SpeedFL, SpeedST, TyreLife</p>
+                        <p><strong>Labels removed:</strong> Driver, Team, Compound (saved separately for comparison)</p>
+                    </div>
+
+                    <h3>Raw Data (before PCA prep)</h3>
+                    <div class="viz-image-container">
+                        <div class="viz-placeholder">
+                            <img src="img\raw_img.png" alt="Raw Data Sample">
+                        </div>
+                    </div>
+                    <p>Raw data includes qualitative columns, timedelta types, and label columns that must be removed before PCA can be applied.</p>
+
+                    <h3>Cleaned & Prepared Data (after PCA prep)</h3>
+                    <div class="viz-image-container">
+                        <div class="viz-placeholder">
+                            <img src="img\clean_data1.png" alt="Cleaned PCA Data">
+                        </div>
+                    </div>
+                    <p>After cleaning: all quantitative, no labels, no nulls. Ready for normalization and PCA.</p>
+                </div>
+
+                <div class="data-section">
+                    <h3>Normalization using StandardScaler</h3>
+                    <p>The data was normalized using <strong>sklearn.preprocessing.StandardScaler</strong>, which transforms each feature to have a mean of 0 and a standard deviation of 1. This step is essential because PCA is sensitive to scale — without normalization, features with larger numerical ranges (e.g. speeds in km/h) would dominate the principal components regardless of their actual importance.</p>
+                    <div class="data-card">
+                        <p><strong>Code used:</strong></p>
+                        <p>scaler = StandardScaler()</p>
+                        <p>X_scaled = scaler.fit_transform(laps_pca_clean)</p>
+                        <p><strong>Result:</strong> mean ≈ 0, std ≈ 1 for every column</p>
+                    </div>
+                </div>
+
+                <div class="data-section">
+                    <h3>PCA with n_components = 2</h3>
+
+                    <div class="visualization-item">
+                        <div class="viz-header">
+                            <div class="viz-number">PCA Visualization 01</div>
+                            <h3 class="viz-title">2D PCA — Colored by Tire Compound</h3>
+                            <p class="viz-description">Each point is a single lap projected onto the first two principal components. Color indicates the tire compound used. SOFT laps cluster toward lower PC1 values (faster times, higher speeds), while HARD laps spread toward higher PC1 values.</p>
+                        </div>
+                        <div class="viz-image-container">
+                            <div class="viz-placeholder">
+                                <img src="img\pca_2d_visualization.png" alt="PCA 2D Visualization">
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="data-card">
+                        <p><strong>PC1 variance explained:</strong> ~55.3%</p>
+                        <p><strong>PC2 variance explained:</strong> ~22.1%</p>
+                        <p><strong>Cumulative variance retained in 2D:</strong> ~77.4%</p>
+                    </div>
+                    <p>The 2D dataset retains approximately <strong>77.4%</strong> of the original information. While useful for visualization, roughly 22.6% of the data's structure has been discarded by reducing to two dimensions.</p>
+                </div>
+
+                <div class="data-section">
+                    <h3>PCA with n_components = 3</h3>
+
+                    <div class="visualization-item">
+                        <div class="viz-header">
+                            <div class="viz-number">PCA Visualization 02</div>
+                            <h3 class="viz-title">3D PCA — Colored by Tire Compound</h3>
+                            <p class="viz-description">Adding a third principal component captures an additional ~10.8% variance. The MEDIUM compound laps, which overlap with SOFT and HARD in 2D, form a more distinct group in 3D space.</p>
+                        </div>
+                        <div class="viz-image-container">
+                            <div class="viz-placeholder">
+                                <img src="img\pca_3d_visualization.png" alt="PCA 3D Visualization">
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="data-card">
+                        <p><strong>PC1:</strong> ~55.3% (cumulative: 55.3%)</p>
+                        <p><strong>PC2:</strong> ~22.1% (cumulative: 77.4%)</p>
+                        <p><strong>PC3:</strong> ~10.8% (cumulative: 88.2%)</p>
+                    </div>
+                    <p>The 3D dataset retains approximately <strong>88.2%</strong> of the original information — a meaningful improvement over 2D while still reducing 9 features down to just 3.</p>
+                </div>
+
+                <div class="data-section">
+                    <h3>How Many Dimensions for ≥ 95% Variance?</h3>
+                    <p>To find the minimum number of components needed to retain at least 95% of the variance, PCA was run with all components and the cumulative explained variance was examined:</p>
+                    <div class="data-card">
+                        <p>1 component: 55.3%</p>
+                        <p>2 components: 77.4%</p>
+                        <p>3 components: 88.2%</p>
+                        <p>4 components: 94.1%</p>
+                        <p><strong>5 components: 97.3% ← 95% threshold crossed</strong></p>
+                    </div>
+
+                    <div class="visualization-item">
+                        <div class="viz-header">
+                            <div class="viz-number">PCA Visualization 03</div>
+                            <h3 class="viz-title">Cumulative Explained Variance — All Components</h3>
+                            <p class="viz-description">The red dashed line marks the 95% threshold. The curve crosses this threshold at 5 components, meaning you need at least 5 dimensions to retain 95% or more of the data's information.</p>
+                        </div>
+                        <div class="viz-image-container">
+                            <div class="viz-placeholder">
+                                <img src="img\pca_cumulative_variance.png" alt="Cumulative Variance">
+                            </div>
+                        </div>
+                    </div>
+                    <p><strong>Answer:</strong> You need <strong>5 components</strong> to retain at least 95% of the data's variance. This reduces the original 9 dimensions by 44% while keeping almost all meaningful information.</p>
+                </div>
+
+                <div class="data-section">
+                    <h3>Top 3 Eigenvalues</h3>
+                    <p>The eigenvalues represent the amount of variance captured by each principal component. Larger eigenvalues indicate more important components.</p>
+                    <div class="viz-image-container">
+                        <div class="viz-placeholder">
+                            <img src="img\pca_eigenvalues.png" alt="Top 3 Eigenvalues Python Output">
+                        </div>
+                    </div>
+                    <div class="data-card">
+                        <p><strong>Eigenvalue 1 (PC1):</strong> 4.9762</p>
+                        <p><strong>Eigenvalue 2 (PC2):</strong> 1.9887</p>
+                        <p><strong>Eigenvalue 3 (PC3):</strong> 0.9742</p>
+                    </div>
+                    <p>PC1 has the dominant eigenvalue (~4.98), confirming it captures the most variance. PC2 and PC3 each capture meaningful but progressively smaller amounts of variation in the data.</p>
+
+                    <div class="visualization-item">
+                        <div class="viz-header">
+                            <div class="viz-number">PCA Visualization 04</div>
+                            <h3 class="viz-title">PCA Feature Loadings (Top 3 Components)</h3>
+                            <p class="viz-description">This chart shows how each original feature contributes to each principal component. PC1 is heavily loaded by LapTime and Sector times (overall pace). PC2 is dominated by SpeedI1 and SpeedFL (straight-line speed). PC3 picks up TyreLife (tire aging effects).</p>
+                        </div>
+                        <div class="viz-image-container">
+                            <div class="viz-placeholder">
+                                <img src="img\pca_feature_loadings.png" alt="PCA Feature Loadings">
+                            </div>
+                        </div>
+                    </div>
+                    <div class="visualization-item">
+                        <div class="viz-header">
+                            <div class="viz-number">Python Code </div>
+                            <h3 class="viz-title">Python code: Github</h3>
+                            <p class="viz-description">GITHUB LINK: https://github.com/NickStrain/F1-Project</p>
+                        </div>
+                        
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- CLUSTERING TAB -->
+        <div id="clustering" class="tab-content">
+            <div class="data-prep-content">
+                <h2>Clustering</h2>
+
+                <div class="data-section">
+                    <h3>(a) Compare and Contrast: KMeans, Hierarchical, and DBSCAN</h3>
+                    <p><strong>KMeans (Partition Clustering)</strong> partitions data into k groups by minimizing within-cluster variance. It is fast, scalable, and produces interpretable centroid-based clusters, but requires specifying k in advance and assumes convex, similarly-sized clusters. It assigns every point to a cluster — outliers are forced into the nearest group.</p>
+                    <p><strong>Hierarchical Clustering</strong> builds a tree (dendrogram) of merges by progressively combining the most similar points or clusters. No k needs to be specified upfront — you cut the dendrogram at any height to get any number of clusters. Ward linkage (used here) minimizes total within-cluster variance at each merge. The tradeoff is computational cost: O(n²) makes it impractical for very large datasets. The dendrogram visualizes the full hierarchy of relationships, revealing how similar clusters are to each other.</p>
+                    <p><strong>DBSCAN (Density-Based Clustering)</strong> groups points that are densely packed together, labeling sparse regions as noise (−1). It automatically discovers the number of clusters, handles clusters of arbitrary shape, and explicitly identifies outlier laps — a key advantage for racing data that contains anomalous laps like formation laps and safety car periods. The key parameters are eps (neighborhood radius) and min_samples (minimum points to form a dense region).</p>
+                    <div class="data-card">
+                        <p><strong>Summary comparison:</strong></p>
+                        <p>KMeans: requires k, no noise handling, spherical clusters, very fast</p>
+                        <p>Hierarchical: no k required, no noise handling, any shape, slow O(n²)</p>
+                        <p>DBSCAN: no k required, handles noise/outliers, any shape, fast O(n log n)</p>
+                    </div>
+                </div>
+
+                <div class="data-section">
+                    <h3>(b) Data Preparation for Clustering</h3>
+                    <p>The same cleaned F1 lap dataset used for PCA was used for clustering. The label column (Compound — tire type) was extracted and saved separately before clustering, then used afterward to compare cluster assignments against the true labels.</p>
+                    <div class="data-card">
+                        <p><strong>Dataset:</strong> f1_pca_data_clean.csv</p>
+                        <p><strong>Label saved:</strong> Compound (SOFT / MEDIUM / HARD) — removed before clustering</p>
+                        <p><strong>Normalization:</strong> StandardScaler (mean=0, std=1)</p>
+                        <p><strong>Dimension reduction:</strong> PCA to 3D applied (88.2% variance retained)</p>
+                    </div>
+
+                    <h3>Before: Labeled, mixed-type data</h3>
+                    <div class="viz-image-container">
+                        <div class="viz-placeholder">
+                            <img src="img\raw_img.png" alt="Pre-clustering raw data">
+                        </div>
+                    </div>
+
+                    <h3>After: PCA 3D, normalized, unlabeled</h3>
+                    <div class="viz-image-container">
+                        <div class="viz-placeholder">
+                            <img src="img\pca_3d_visualization.png" alt="PCA 3D cluster-ready data">
+                        </div>
+                    </div>
+                    <p>Variance retained after PCA 3D reduction: <strong>88.2%</strong>. This means 11.8% of information was traded off for a significant reduction in complexity — an acceptable tradeoff for clustering.</p>
+                </div>
+
+                <div class="data-section">
+                    <h3>(c) KMeans Clustering — Silhouette Method</h3>
+                    <p>The Silhouette score measures how similar each point is to its own cluster compared to other clusters. Scores range from −1 (wrong cluster) to +1 (well-clustered). Silhouette scores and inertia (elbow curve) were computed for k = 2 through 9 to identify the three best values of k.</p>
+
+                    <div class="visualization-item">
+                        <div class="viz-header">
+                            <div class="viz-number">Clustering Visualization 01</div>
+                            <h3 class="viz-title">Silhouette Scores & Elbow Curve</h3>
+                            <p class="viz-description">Left: Silhouette scores by k — peaks indicate good cluster separation. Right: Elbow/inertia curve — the bend indicates diminishing returns. Top 3 k values selected: k=3, k=4, k=5.</p>
+                        </div>
+                        <div class="viz-image-container">
+                            <div class="viz-placeholder">
+                                <img src="img\clustering_silhouette_elbow.png" alt="Silhouette and Elbow">
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="visualization-item">
+                        <div class="viz-header">
+                            <div class="viz-number">Clustering Visualization 02</div>
+                            <h3 class="viz-title">KMeans — k=3, k=4, k=5 (PCA 2D projection)</h3>
+                            <p class="viz-description">Each plot shows laps colored by their KMeans cluster assignment, with centroids marked as ×. At k=3 the clusters align closely with the three tire compounds. At k=4 and k=5, track-specific performance sub-clusters emerge within compound groups.</p>
+                        </div>
+                        <div class="viz-image-container">
+                            <div class="viz-placeholder">
+                                <img src="img\clustering_kmeans_results.png" alt="KMeans Results">
+                            </div>
+                        </div>
+                    </div>
+
+                    <p>At k=3, clusters align closely with SOFT / MEDIUM / HARD compounds, validating that tire compound is the strongest grouping variable. At k=4 and k=5, sub-clusters emerge corresponding to track-specific performance bands, suggesting that circuit character interacts with tire behavior to create secondary groups.</p>
+                </div>
+
+                <div class="data-section">
+                    <h3>Hierarchical Clustering — Dendrogram</h3>
+                    <p>Ward linkage hierarchical clustering was applied to a 300-lap sample. Ward linkage minimizes total within-cluster variance at each merge step, producing compact, similarly-sized clusters. The dendrogram visualizes the full hierarchy of how laps group together.</p>
+
+                    <div class="visualization-item">
+                        <div class="viz-header">
+                            <div class="viz-number">Clustering Visualization 03</div>
+                            <h3 class="viz-title">Dendrogram — Ward Linkage (300-lap sample)</h3>
+                            <p class="viz-description">A horizontal cut at height ~8 yields 3 main clusters, matching the KMeans k=3 result. The dendrogram also reveals that SOFT and MEDIUM laps are more similar to each other (merge earlier) than either is to HARD laps.</p>
+                        </div>
+                        <div class="viz-image-container">
+                            <div class="viz-placeholder">
+                                <img src="img\clustering_dendrogram.png" alt="Hierarchical Dendrogram">
+                            </div>
+                        </div>
+                    </div>
+
+                    <p>Compared to KMeans: cutting the dendrogram at height ~8 produces 3 clusters that closely match KMeans k=3. However, the dendrogram adds nuance — SOFT and MEDIUM tyres are more similar to each other than either is to HARD, which is not immediately visible from KMeans alone.</p>
+                </div>
+
+                <div class="data-section">
+                    <h3>DBSCAN Clustering</h3>
+                    <p>DBSCAN was run with eps=0.5 and min_samples=10 on a 5,000-lap sample of the PCA-reduced data.</p>
+
+                    <div class="visualization-item">
+                        <div class="viz-header">
+                            <div class="viz-number">Clustering Visualization 04</div>
+                            <h3 class="viz-title">DBSCAN Results (eps=0.5, min_samples=10)</h3>
+                            <p class="viz-description">DBSCAN found 4 clusters and identified 87 outlier laps (~1.7%) shown in black. These outliers correspond to anomalous laps such as formation laps, pit outlaps, and safety car periods that KMeans forced into existing clusters.</p>
+                        </div>
+                        <div class="viz-image-container">
+                            <div class="viz-placeholder">
+                                <img src="img\clustering_dbscan.png" alt="DBSCAN Results">
+                            </div>
+                        </div>
+                    </div>
+
+                    <p>DBSCAN found 4 clusters — similar to KMeans k=4 — but with irregular, non-spherical boundaries that better capture the real shape of the data. Its key advantage here is explicit noise detection: the 87 outlier laps are cleanly separated rather than distorting cluster centers as they would in KMeans.</p>
+                </div>
+
+                <div class="data-section">
+                    <h3>(d) Conclusions</h3>
+                    <p>All three clustering methods agree on a consistent finding: tire compound is the dominant grouping variable in F1 lap data. SOFT tires produce a distinct cluster of faster laps; HARD tires form a separate cluster of slower, more spread-out laps; MEDIUM tires occupy an intermediate space closer to SOFT than to HARD. This confirms real-world expectations and validates the quality of the dataset.</p>
+                    <p>The hierarchical dendrogram added nuance by revealing relative similarity between compound clusters. DBSCAN's identification of ~1.7% outlier laps highlights that anomalous laps (pit stops, safety car, formation) behave very differently from normal racing laps and should be treated separately in predictive modeling.</p>
+                    <p>At finer granularity, track-specific performance bands emerge as secondary structure within compound groups, confirming that circuit character — high-speed vs. technical vs. street circuits — creates meaningful sub-groups beyond tire selection alone.</p>
+                </div>
+                <div class="visualization-item">
+                        <div class="viz-header">
+                            <div class="viz-number">Python Code </div>
+                            <h3 class="viz-title">Python code: Github</h3>
+                            <p class="viz-description">GITHUB LINK: https://github.com/NickStrain/F1-Project</p>
+                        </div>
+                        
+                    </div>
+            </div>
+        </div>
+
+        <!-- ARM TAB -->
+        <div id="arm" class="tab-content">
+            <div class="data-prep-content">
+                <h2>Association Rule Mining (ARM)</h2>
+
+                <div class="data-section">
+                    <h3>(a) Overview of ARM</h3>
+                    <p>Association Rule Mining (ARM) is an unsupervised machine learning technique for discovering interesting relationships — called association rules — between variables in large transaction datasets. It was originally developed for market-basket analysis but applies to any domain where co-occurrences are meaningful. In Formula 1, we treat each lap as a transaction and discover which strategic events tend to occur together.</p>
+                    <p>A rule takes the form A → B: "if A appears in a transaction, then B also tends to appear." Three measures evaluate rule quality:</p>
+                    <div class="data-card">
+                        <p><strong>Support:</strong> How often an itemset appears in the dataset. support(A) = count(A) / total_transactions. High support means the pattern is common.</p>
+                        <p><strong>Confidence:</strong> How often the rule is correct. confidence(A→B) = support(A ∪ B) / support(A). High confidence means when A occurs, B reliably follows.</p>
+                        <p><strong>Lift:</strong> How much more likely B is given A, compared to B's base rate. lift(A→B) = confidence(A→B) / support(B). Lift > 1 means A and B co-occur more than by chance. Lift is typically the most useful measure for finding truly interesting rules.</p>
+                    </div>
+                    <p><strong>The Apriori Algorithm</strong> is the classic method for finding frequent itemsets efficiently. It relies on the anti-monotone principle: if an itemset is infrequent, all its supersets must also be infrequent. Starting from single items, Apriori iteratively generates candidate itemsets of increasing size, pruning any candidate that contains an infrequent subset. This dramatically reduces the search space compared to brute force enumeration.</p>
+
+                    <div class="viz-image-container">
+                        <div class="viz-placeholder">
+                            <img src="img\arm_overview1.png" alt="ARM Overview">
+                        </div>
+                    </div>
+                    <div class="viz-image-container">
+                        <div class="viz-placeholder">
+                            <img src="img\arm_overview2.png" alt="Apriori Algorithm">
+                        </div>
+                    </div>
+                </div>
+
+                <div class="data-section">
+                    <h3>(b) Data Preparation for ARM</h3>
+                    <p>ARM requires <strong>unlabeled transaction data</strong> — each row represents a basket of items that co-occurred, with Boolean values (True/False) indicating item presence. There are no numeric values and no target labels. In our F1 context, each lap is one transaction and items are categorical events describing what occurred on that lap.</p>
+                    <p>To create this format, continuous variables were discretized into categories: lap times were binned into FAST / MEDIUM / SLOW thirds per race; race progress was divided into EARLY / MID / LATE phases; pit stop occurrence was flagged as YES / NO. Tire compound (SOFT / MEDIUM / HARD) and Team were kept as-is since they are already categorical.</p>
+                    <div class="viz-image-container">
+                        <div class="viz-placeholder">
+                            <img src="img\arm_transaction_sample.png" alt="ARM Transaction Data Sample">
+                        </div>
+                    </div>
+                    <p>Sample of the ARM transaction data — f1_arm_transactions_sample.csv. Each row is one lap; each column is a Boolean item flag. This format is required by the Apriori algorithm. <a href="img\arm_transaction_sample.png" target="_blank" style="color: var(--accent); text-decoration: none;">Link to sample data</a></p>
+                </div>
+
+                <div class="data-section">
+                    <h3>(c) Running Apriori & Generating Rules</h3>
+                    <div class="data-card">
+                        <p><strong>Library:</strong> mlxtend (Python)</p>
+                        <p><strong>min_support:</strong> 0.05 (item must appear in at least 5% of laps)</p>
+                        <p><strong>min_confidence:</strong> 0.30</p>
+                        <p><strong>min_lift:</strong> 1.0</p>
+                        <p><strong>Frequent itemsets found:</strong> 42</p>
+                        <p><strong>Rules generated:</strong> 118</p>
+                    </div>
+                    <p>These thresholds were chosen to capture meaningful patterns without being too restrictive given the dataset size (~5,000 laps). A min_support of 5% ensures patterns are not just rare coincidences, while min_lift of 1.0 ensures rules represent positive associations only.</p>
+                </div>
+                
+
+                <div class="data-section">
+                    <h3>(d) Results — Top 15 Rules</h3>
+
+                    <div class="visualization-item">
+                        <div class="viz-header">
+                            <div class="viz-number">ARM Visualization 01</div>
+                            <h3 class="viz-title">Top 15 Rules by Support</h3>
+                            <p class="viz-description">Rules ranked by how frequently the itemset appears across all laps. High support means these patterns are common in the data.</p>
+                        </div>
+                        <div class="viz-image-container">
+                            <div class="viz-placeholder">
+                                <img src="img\arm_rules_support.png" alt="Top 15 Rules by Support">
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="visualization-item">
+                        <div class="viz-header">
+                            <div class="viz-number">ARM Visualization 02</div>
+                            <h3 class="viz-title">Top 15 Rules by Confidence</h3>
+                            <p class="viz-description">Rules ranked by reliability — given the antecedent, how often does the consequent also appear? High confidence rules are the most predictably correct.</p>
+                        </div>
+                        <div class="viz-image-container">
+                            <div class="viz-placeholder">
+                                <img src="img\arm_rules_confidence.png" alt="Top 15 Rules by Confidence">
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="visualization-item">
+                        <div class="viz-header">
+                            <div class="viz-number">ARM Visualization 03</div>
+                            <h3 class="viz-title">Top 15 Rules by Lift</h3>
+                            <p class="viz-description">Rules ranked by lift — how much more likely the consequent is given the antecedent compared to its base rate. Lift > 1 means a genuinely interesting non-random association.</p>
+                        </div>
+                        <div class="viz-image-container">
+                            <div class="viz-placeholder">
+                                <img src="img\arm_rules_lift.png" alt="Top 15 Rules by Lift">
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="visualization-item">
+                        <div class="viz-header">
+                            <div class="viz-number">ARM Visualization 04</div>
+                            <h3 class="viz-title">Network Visualization — Top 20 Rules by Lift</h3>
+                            <p class="viz-description">Each node is an item (compound, lap speed category, race phase, team). Directed edges represent rules; edge thickness indicates lift strength. This network reveals the web of strategic associations found in F1 lap data.</p>
+                        </div>
+                        <div class="viz-image-container">
+                            <div class="viz-placeholder">
+                                <img src="img\arm_network.png" alt="ARM Network Graph">
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="data-section">
+                    <h3>(e) Conclusions</h3>
+                    <p><strong>SOFT → FAST lap</strong> is the strongest rule (high confidence and lift ~2.3), confirming that soft tires reliably produce faster laps. The high lift value quantifies how much more likely a FAST lap is on soft tires compared to the overall average.</p>
+                    <p><strong>HARD → LATE race phase</strong> is a frequently occurring association, reflecting the classic F1 one-stop strategy of starting on soft or medium tires and finishing on hard compounds. Teams actively engineer this pattern to maximize overall race performance.</p>
+                    <p><strong>PitStop + MEDIUM → MID race phase</strong> reveals that medium tire pit stops are overwhelmingly a mid-race phenomenon. Teams using medium compounds tend to pit earlier than those on hard tires, bridging between an initial soft stint and a final harder compound.</p>
+                    <p>These findings provide actionable strategic intelligence: knowing these associations allows a team to anticipate competitor pit timing, predict likely tire choices, and plan their own strategy to gain competitive advantage. ARM transforms raw lap data into a readable map of the hidden strategic logic governing modern Formula 1 races.</p>
+                </div>
+                <div class="visualization-item">
+                        <div class="viz-header">
+                            <div class="viz-number">Python Code </div>
+                            <h3 class="viz-title">Python code: Github</h3>
+                            <p class="viz-description">GITHUB LINK: https://github.com/NickStrain/F1-Project</p>
+                        </div>
+                        
+                    </div>
             </div>
         </div>
 
@@ -627,32 +978,27 @@
         <div id="conclusions" class="tab-content">
             <div class="conclusions-content">
                 <h2>Conclusions</h2>
-                
-                <!-- <div class="conclusion-placeholder">
-                    <p style="color: var(--text); font-style: italic;">
-                        The conclusions section will be completed after all analyses are performed in future modules. 
-                        This section will synthesize findings in non-technical language, answering the research questions 
-                        and providing actionable insights about Formula 1 racing performance, tire strategies, and competitive dynamics.
-                    </p>
-                </div>
 
-                <p>
-                    This section will provide comprehensive conclusions drawn from the data analysis, presented in accessible, 
-                    non-technical language suitable for any reader. The conclusions will address the research questions posed 
-                    in the introduction and explain the practical implications of findings for understanding modern Formula 1 racing.
-                </p> -->
+                <p>This project applied three advanced machine learning techniques — PCA, clustering, and association rule mining — to Formula 1 lap data from the 2024 season to extract insights about racing performance, tire strategy, and competitive dynamics.</p>
+
+                <h3>PCA Findings</h3>
+                <p>Tire compound and overall lap pace are the dominant sources of variance in F1 performance data, captured by the first two principal components alone (77.4%). Five components are sufficient to retain 95% of the data's information, enabling dramatic dimensionality reduction with minimal information loss. The feature loading analysis revealed that PC1 represents overall pace (lap time + sector times), PC2 represents straight-line speed (SpeedI1, SpeedFL), and PC3 captures tire aging effects (TyreLife).</p>
+
+                <h3>Clustering Findings</h3>
+                <p>All three clustering methods — KMeans, hierarchical, and DBSCAN — converge on tire compound as the primary grouping structure, with 3 clusters mapping cleanly to SOFT / MEDIUM / HARD. Secondary clusters at finer granularity reveal track-specific performance bands. DBSCAN's identification of ~1.7% outlier laps highlights that anomalous laps (formation laps, safety car periods, pit outlaps) must be handled carefully in any predictive pipeline.</p>
+
+                <h3>ARM Findings</h3>
+                <p>The Apriori algorithm uncovered clear strategic patterns: SOFT tires reliably produce FAST laps (lift ~2.3), HARD tires cluster in LATE race phases, and MEDIUM tire pit stops predominantly occur mid-race. These patterns quantitatively confirm the strategic logic that expert commentators observe qualitatively, and could directly inform real-time strategy tools used by teams during races.</p>
+
+                <h3>Answers to Research Questions</h3>
+                <p><strong>Q1 — Tire compound vs. lap time:</strong> SOFT tires produce the fastest laps across all circuit types, with HARD tires typically 1.5–3 seconds slower per lap depending on the circuit.</p>
+                <p><strong>Q2 — Tire age vs. degradation:</strong> Lap time degrades approximately linearly with tire age at ~0.08–0.12 seconds per lap, with SOFT tires showing steeper degradation than HARD.</p>
+                <p><strong>Q5 — Tire degradation predicting pit timing:</strong> ARM rules confirm that teams can be characterized by their tire strategy archetypes, with clear associations between compound choice and race phase that effectively predict when pit stops will occur.</p>
+                <p><strong>Q6 — Correlates of competitive lap times:</strong> The correlation heatmap and PCA loadings show that Sector 1 time is most strongly correlated with overall lap time, followed by Sector 3 — indicating that the first sector is the primary differentiator of lap time performance.</p>
             </div>
         </div>
+
     </main>
-
-    <!-- <footer>
-        <div class="container">
-            <div class="footer-content">
-                <p>Formula 1 Data Science Project — 2024 Season Analysis</p>
-                <p style="margin-top: 0.5rem;">Data Source: <a href="https://github.com/theOehrly/Fast-F1" target="_blank" style="color: var(--accent); text-decoration: none;">FastF1 API</a> — Official F1 Live Timing Service</p>
-            </div>
-        </div>
-    </footer> -->
 
     <script>
         // Tab Navigation
