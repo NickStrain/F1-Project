@@ -65,7 +65,11 @@
             gap: 0;
             margin-top: 2rem;
             border-bottom: 1px solid var(--border);
+            overflow-x: auto;
+            -webkit-overflow-scrolling: touch;
+            scrollbar-width: none;
         }
+        .tab-nav::-webkit-scrollbar { display: none; }
 
         .tab-button {
             font-family: 'Inter', sans-serif;
@@ -311,6 +315,9 @@
                 <button class="tab-button" data-tab="clustering">Clustering</button>
                 <button class="tab-button" data-tab="arm">ARM</button>
                 <button class="tab-button" data-tab="conclusions">Conclusions</button>
+                <button class="tab-button" data-tab="naive-bayes">Naïve Bayes</button>
+                <button class="tab-button" data-tab="decision-tree">Decision Tree</button>
+                <button class="tab-button" data-tab="regression">Regression</button>
             </nav>
         </div>
     </header>
@@ -339,6 +346,10 @@
                 <div class="intro-image">
                     <img src="img\viz8_correlation_heatmap.png" alt="Correlation Heatmap of F1 Performance Variables">
                 </div>
+
+                <p>What makes Formula 1 truly extraordinary from an analytical perspective is that every single lap — across every driver, every team, and every circuit — tells the same fundamental story in a slightly different way. The tyre a driver is running on shapes everything: how fast the car can corner, how quickly it reaches the end of the straight, how much the lap time creeps upward as the rubber wears down. Across five races and hundreds of competitive laps, this story repeats itself with enough regularity that a well-designed analysis can learn to read it. When that learning reaches the point where a model can look at a lap's timing data alone — without being told the tyre compound — and correctly identify what that driver was running on, it is no longer just descriptive analysis. It has become prediction, and prediction is where data science becomes a genuine competitive tool.</p>
+
+                <p>As the project advances, a new and exciting question emerges: can the patterns hidden inside race data be used to actually <em>predict</em> what happens next? Every lap on a Formula 1 circuit tells a story — about how fresh the tyres are, how the car is behaving, how aggressive or conservative the driver's approach is, and how the broader race situation is evolving. Just as an experienced engineer can glance at a live timing screen and instinctively sense which team is managing tyres versus pushing flat-out, data can be used to build systems that make those same inferences automatically — and at a scale no human could match. The goal of this expanded analysis is not just to describe what happened in past races, but to develop an understanding capable of making informed predictions about what <em>will</em> happen, giving any team, analyst, or fan a sharper view into the strategic chess match that unfolds over 50-plus laps every Grand Prix weekend.</p>
 
                 <div class="questions-section">
                     <h3>Research Questions</h3>
@@ -979,22 +990,784 @@
             <div class="conclusions-content">
                 <h2>Conclusions</h2>
 
-                <p>This project applied three advanced machine learning techniques — PCA, clustering, and association rule mining — to Formula 1 lap data from the 2024 season to extract insights about racing performance, tire strategy, and competitive dynamics.</p>
+                <p>This project applied the full Data Science Lifecycle to Formula 1 lap telemetry data — from raw data collection and cleaning through unsupervised exploration to supervised prediction — building a layered understanding of the patterns and forces that determine lap performance and tyre strategy in modern Formula 1.</p>
+
+                <h3>Module 2 — Unsupervised Learning Findings</h3>
 
                 <h3>PCA Findings</h3>
-                <p>Tire compound and overall lap pace are the dominant sources of variance in F1 performance data, captured by the first two principal components alone (77.4%). Five components are sufficient to retain 95% of the data's information, enabling dramatic dimensionality reduction with minimal information loss. The feature loading analysis revealed that PC1 represents overall pace (lap time + sector times), PC2 represents straight-line speed (SpeedI1, SpeedFL), and PC3 captures tire aging effects (TyreLife).</p>
+                <p>Tyre compound and overall lap pace are the dominant sources of variance in F1 performance data, captured by the first two principal components alone (77.4%). Five components are sufficient to retain 95% of the data's information, enabling dramatic dimensionality reduction with minimal information loss. The feature loading analysis revealed that PC1 represents overall pace (lap time + sector times), PC2 represents straight-line speed (SpeedI1, SpeedFL), and PC3 captures tyre aging effects (TyreLife).</p>
 
                 <h3>Clustering Findings</h3>
-                <p>All three clustering methods — KMeans, hierarchical, and DBSCAN — converge on tire compound as the primary grouping structure, with 3 clusters mapping cleanly to SOFT / MEDIUM / HARD. Secondary clusters at finer granularity reveal track-specific performance bands. DBSCAN's identification of ~1.7% outlier laps highlights that anomalous laps (formation laps, safety car periods, pit outlaps) must be handled carefully in any predictive pipeline.</p>
+                <p>All three clustering methods — KMeans, hierarchical, and DBSCAN — converge on tyre compound as the primary grouping structure, with 3 clusters mapping cleanly to SOFT / MEDIUM / HARD. Secondary clusters at finer granularity reveal track-specific performance bands. DBSCAN's identification of ~1.7% outlier laps highlights that anomalous laps (formation laps, safety car periods, pit outlaps) must be handled carefully in any predictive pipeline.</p>
 
                 <h3>ARM Findings</h3>
-                <p>The Apriori algorithm uncovered clear strategic patterns: SOFT tires reliably produce FAST laps (lift ~2.3), HARD tires cluster in LATE race phases, and MEDIUM tire pit stops predominantly occur mid-race. These patterns quantitatively confirm the strategic logic that expert commentators observe qualitatively, and could directly inform real-time strategy tools used by teams during races.</p>
+                <p>The Apriori algorithm uncovered clear strategic patterns: SOFT tyres reliably produce FAST laps (lift ~2.3), HARD tyres cluster in LATE race phases, and MEDIUM tyre pit stops predominantly occur mid-race. These patterns quantitatively confirm the strategic logic that expert commentators observe qualitatively, and could directly inform real-time strategy tools used by teams during races.</p>
+
+                <h3>Module 3 — Supervised Learning Findings</h3>
+                <p>The supervised learning phase introduced a concrete prediction task: classify each lap as completed on SOFT compound (IsSoft = 1) or not (IsSoft = 0) using only raw lap timing and speed metrics. Three model families were trained and compared on the same 80/20 stratified split across 5 races of 2023-season FastF1 data.</p>
+
+                <h3>Naïve Bayes Findings</h3>
+                <p>Gaussian NB achieved the best accuracy among the three NB flavours because lap metrics are genuinely continuous and approximately Gaussian within each compound class — exactly what Gaussian NB assumes. Bernoulli NB retained meaningful accuracy even after reducing all features to binary flags, demonstrating NB's well-known robustness. Multinomial NB underperformed because forcing continuous measurements into an integer-count format violates its core distributional assumption. Across all flavours, the fact that any NB variant can predict tyre compound above chance confirms that SOFT-tyre laps produce a statistically separable performance signature.</p>
+
+                <h3>Decision Tree Findings</h3>
+                <p>All three Decision Tree configurations rooted at TyreLife or a speed-trap feature — confirming that the trees learned real F1 physics, not spurious correlations. Tree 1 (Gini, depth=4) achieved the highest DT accuracy; Tree 2 (Entropy, depth=3) traded modest accuracy for dramatically simpler, briefing-ready rules; Tree 3 (speed-only, depth=5) demonstrated that compound is detectable from speed-trap data alone — publicly available in real time — making it deployable as a live race inference tool even without full lap telemetry.</p>
+
+                <h3>All Models — Accuracy Comparison</h3>
+                <p>All seven model configurations (3 NB variants, 3 DT configurations, 1 Logistic Regression) were trained and evaluated on the identical dataset and split. The chart and confusion matrices below rank every model and show side-by-side prediction quality for the best variant from each family.</p>
+
+                <div class="visualization-item">
+                    <div class="viz-header">
+                        <div class="viz-number">Comparison Visualisation 01</div>
+                        <h3 class="viz-title">All Seven Models — Ranked Accuracy Comparison</h3>
+                        <p class="viz-description">Horizontal bar chart of all seven model configurations ranked by test-set accuracy. Teal = Naïve Bayes family; yellow = Decision Tree family; orange = Logistic Regression. Because all models were evaluated on the same held-out test set, this chart is a direct, fair ranking of predictive capability for the F1 tyre compound classification task.</p>
+                    </div>
+                    <div class="viz-image-container">
+                        <div class="viz-placeholder"><img src="img/model_comparison.png" alt="Full Model Comparison Chart"></div>
+                    </div>
+                </div>
+
+                <div class="visualization-item">
+                    <div class="viz-header">
+                        <div class="viz-number">Comparison Visualisation 02</div>
+                        <h3 class="viz-title">Best of Each Family — Side-by-Side Confusion Matrices</h3>
+                        <p class="viz-description">Direct head-to-head comparison of the best-performing variant from each family: Gaussian NB, Decision Tree (Gini, depth=4), and Logistic Regression — all on the same test set. The off-diagonal cells reveal each model's characteristic failure mode: which compound class does each model misclassify more, and does one model show a systematic bias toward false positives or false negatives?</p>
+                    </div>
+                    <div class="viz-image-container">
+                        <div class="viz-placeholder"><img src="img/comparison_best_cms.png" alt="Best Model Confusion Matrices Side by Side"></div>
+                    </div>
+                </div>
+
+                <h3>Which Model Works Best for This Project?</h3>
+                <div style="overflow-x:auto;margin:1.5rem 0;">
+                    <table style="width:100%;border-collapse:collapse;font-size:0.9rem;">
+                        <thead>
+                            <tr style="background:#f5f5f5;text-align:left;">
+                                <th style="padding:0.75rem 1rem;border:1px solid var(--border);">Model</th>
+                                <th style="padding:0.75rem 1rem;border:1px solid var(--border);">Strengths</th>
+                                <th style="padding:0.75rem 1rem;border:1px solid var(--border);">Weaknesses</th>
+                                <th style="padding:0.75rem 1rem;border:1px solid var(--border);">Best F1 Use Case</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td style="padding:0.65rem 1rem;border:1px solid var(--border);font-weight:600;color:#2a9d8f;">Gaussian NB</td>
+                                <td style="padding:0.65rem 1rem;border:1px solid var(--border);">Fastest inference, probabilistic output, no hyperparameter tuning needed</td>
+                                <td style="padding:0.65rem 1rem;border:1px solid var(--border);">Assumes feature independence — violated by correlated sector times</td>
+                                <td style="padding:0.65rem 1rem;border:1px solid var(--border);">Real-time streaming pipelines — millisecond latency required</td>
+                            </tr>
+                            <tr style="background:#fafafa;">
+                                <td style="padding:0.65rem 1rem;border:1px solid var(--border);font-weight:600;color:#e9c46a;">Decision Tree</td>
+                                <td style="padding:0.65rem 1rem;border:1px solid var(--border);">Fully human-readable rules, no feature scaling, handles non-linear boundaries</td>
+                                <td style="padding:0.65rem 1rem;border:1px solid var(--border);">Prone to overfitting without careful depth tuning; sensitive to data changes</td>
+                                <td style="padding:0.65rem 1rem;border:1px solid var(--border);">Stakeholder presentations — engineers read and trust the flowchart directly</td>
+                            </tr>
+                            <tr>
+                                <td style="padding:0.65rem 1rem;border:1px solid var(--border);font-weight:600;color:#e76f51;">Logistic Regression</td>
+                                <td style="padding:0.65rem 1rem;border:1px solid var(--border);">Calibrated probabilities, interpretable coefficients, regularisable, stable</td>
+                                <td style="padding:0.65rem 1rem;border:1px solid var(--border);">Assumes a linear decision boundary — may miss complex feature interactions</td>
+                                <td style="padding:0.65rem 1rem;border:1px solid var(--border);">Production strategy tools — probability scores drive live pit-window decisions</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+
+                <div class="conclusion-placeholder">
+                    <p><strong>Verdict: Logistic Regression is recommended for production deployment in an F1 strategy pipeline.</strong></p>
+                    <p>It achieves the highest or near-highest accuracy and — critically — outputs <em>calibrated probability scores</em> rather than just hard class labels. A strategy tool that outputs "P(SOFT) = 0.91" is far more actionable than one that outputs only "SOFT": the confidence level tells the engineer whether to act immediately or wait for more data before committing a pit call. The feature coefficients (negative TyreLife, negative LapTime, positive speed features) are also physically interpretable, confirming the model has learned real F1 physics rather than spurious correlations.</p>
+                    <p><strong>For non-technical communication</strong> — team presentations, media briefings, sponsor reports — the <strong>Decision Tree</strong> visualisation is unmatched. Any person can follow a flowchart from root to leaf without any data science background, building immediate trust in the model's logic.</p>
+                    <p><strong>For embedded or streaming systems</strong> where inference latency is measured in microseconds and model simplicity is paramount, <strong>Gaussian NB</strong> is the lightest option — a single matrix multiply and a lookup table, with no iterative solver required at inference time.</p>
+                </div>
 
                 <h3>Answers to Research Questions</h3>
-                <p><strong>Q1 — Tire compound vs. lap time:</strong> SOFT tires produce the fastest laps across all circuit types, with HARD tires typically 1.5–3 seconds slower per lap depending on the circuit.</p>
-                <p><strong>Q2 — Tire age vs. degradation:</strong> Lap time degrades approximately linearly with tire age at ~0.08–0.12 seconds per lap, with SOFT tires showing steeper degradation than HARD.</p>
-                <p><strong>Q5 — Tire degradation predicting pit timing:</strong> ARM rules confirm that teams can be characterized by their tire strategy archetypes, with clear associations between compound choice and race phase that effectively predict when pit stops will occur.</p>
-                <p><strong>Q6 — Correlates of competitive lap times:</strong> The correlation heatmap and PCA loadings show that Sector 1 time is most strongly correlated with overall lap time, followed by Sector 3 — indicating that the first sector is the primary differentiator of lap time performance.</p>
+                <p><strong>Q1 — Tyre compound vs. lap time:</strong> SOFT tyres produce the fastest laps across all circuit types, with HARD tyres typically 1.5–3 seconds slower per lap. All three supervised models confirmed this by selecting tyre-age and lap-time features as the strongest compound predictors.</p>
+                <p><strong>Q2 — Tyre age vs. degradation:</strong> Lap time degrades approximately linearly with tyre age at ~0.08–0.12 seconds per lap, with SOFT tyres showing steeper degradation than HARD. TyreLife emerged as the single most informative feature in both NB and Decision Tree models.</p>
+                <p><strong>Q5 — Tyre degradation predicting pit timing:</strong> ARM rules confirmed compound-phase associations; supervised models confirmed that tyre state (TyreLife + lap pace) is directly classifiable — together these enable predictive pit-window modelling.</p>
+                <p><strong>Q6 — Correlates of competitive lap times:</strong> PCA loadings and logistic regression coefficients both highlight Sector 1 time and straight-line speed as primary performance differentiators, consistent with the correlation heatmap from Module 1.</p>
+            </div>
+        </div>
+
+        <!-- NAIVE BAYES TAB -->
+        <div id="naive-bayes" class="tab-content">
+            <div class="data-prep-content">
+                <h2>Naïve Bayes</h2>
+
+                <!-- (a) Overview -->
+                <div class="data-section">
+                    <h3>(a) Overview</h3>
+                    <p><strong>Naïve Bayes (NB)</strong> is a family of probabilistic classifiers rooted in <strong>Bayes' Theorem</strong> with one defining simplifying assumption: all features are <em>conditionally independent</em> given the class label. In reality this independence rarely holds perfectly — lap time and sector times are clearly correlated — yet NB models are fast, interpretable, and surprisingly competitive across domains including spam filtering, medical diagnosis, sentiment analysis, document classification, and real-time fraud detection. The model estimates the probability of each class given the observed features, then selects the most probable class as its prediction.</p>
+
+                    <p><strong>Bayes' Theorem:</strong></p>
+                    <div class="data-card" style="text-align:center;font-size:1.1rem;letter-spacing:0.03em;">
+                        <p>P(class | features) &nbsp;=&nbsp; <strong>P(features | class) &times; P(class)</strong> &nbsp;/&nbsp; P(features)</p>
+                        <p style="font-size:0.9rem;margin-top:0.5rem;color:var(--text-light);">
+                            Posterior = (Likelihood &times; Prior) / Evidence
+                        </p>
+                    </div>
+                    <p>The "naïve" part is treating every feature independently — P(x₁,x₂,…,xₙ | class) = ∏ P(xᵢ | class). This collapses a joint probability into a simple product, making computation tractable even with hundreds of features. <strong>When is NB used?</strong> When speed matters (NB trains in milliseconds), when data is limited (few parameters to estimate), and when the independence assumption is reasonable or the strong performance overcomes the violation.</p>
+
+                    <h3>The Four Flavors of Naïve Bayes</h3>
+                    <div class="data-card">
+                        <p><strong>🔵 Multinomial NB (MN NB)</strong> — Assumes features are <em>non-negative integer counts</em> drawn from a multinomial distribution. Classic use case: word-count vectors in text classification (how many times does "pit" appear in a race report?). Requires non-negative integer input. <em>In F1:</em> we scale lap metrics to [0,100] and round to simulate count-like data. <a href="https://scikit-learn.org/stable/modules/naive_bayes.html#multinomial-naive-bayes" target="_blank" style="color:var(--accent);">sklearn docs ↗</a></p>
+                        <p><strong>🟢 Gaussian NB (GNB)</strong> — Assumes each feature follows a <em>Normal (Gaussian) distribution</em> within each class, parameterized by per-class mean and variance. Best choice for continuous real-valued sensor data. <em>In F1:</em> lap times, sector times, and speed trap readings are genuine continuous measurements — this flavor fits our data most naturally. <a href="https://scikit-learn.org/stable/modules/naive_bayes.html#gaussian-naive-bayes" target="_blank" style="color:var(--accent);">sklearn docs ↗</a></p>
+                        <p><strong>🟡 Bernoulli NB (BNB)</strong> — Assumes each feature is <em>binary (0 or 1)</em>. Models whether a feature is present or absent, not its magnitude. Classic use: Boolean word-presence vectors. <em>In F1:</em> features binarized at their training-set medians — "is this lap's time above median?" becomes a yes/no signal. Loses frequency/magnitude information but remains robust. <a href="https://scikit-learn.org/stable/modules/naive_bayes.html#bernoulli-naive-bayes" target="_blank" style="color:var(--accent);">sklearn docs ↗</a></p>
+                        <p><strong>🟠 Categorical NB (CNB)</strong> — Assumes features are <em>discrete nominal categories</em> (integer-encoded). Unlike Multinomial, it does not treat values as counts — it estimates a separate probability for each category level. Best for: truly categorical data like tyre compound type, circuit name, team ID. <em>In F1:</em> this would be ideal if we used team, circuit, and tyre compound as features directly. <a href="https://scikit-learn.org/stable/modules/naive_bayes.html#categorical-naive-bayes" target="_blank" style="color:var(--accent);">sklearn docs ↗</a></p>
+                    </div>
+
+                    <h3>Compare &amp; Contrast — When to Use Each</h3>
+                    <div style="overflow-x:auto;margin:1.5rem 0;">
+                        <table style="width:100%;border-collapse:collapse;font-size:0.9rem;">
+                            <thead>
+                                <tr style="background:#f5f5f5;text-align:left;">
+                                    <th style="padding:0.75rem 1rem;border:1px solid var(--border);">Flavor</th>
+                                    <th style="padding:0.75rem 1rem;border:1px solid var(--border);">Likelihood Assumption</th>
+                                    <th style="padding:0.75rem 1rem;border:1px solid var(--border);">Input Type</th>
+                                    <th style="padding:0.75rem 1rem;border:1px solid var(--border);">Best For</th>
+                                    <th style="padding:0.75rem 1rem;border:1px solid var(--border);">F1 Fit</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <td style="padding:0.65rem 1rem;border:1px solid var(--border);font-weight:600;">Gaussian</td>
+                                    <td style="padding:0.65rem 1rem;border:1px solid var(--border);">Normal distribution per feature per class</td>
+                                    <td style="padding:0.65rem 1rem;border:1px solid var(--border);">Continuous floats</td>
+                                    <td style="padding:0.65rem 1rem;border:1px solid var(--border);">Sensor data, measurements</td>
+                                    <td style="padding:0.65rem 1rem;border:1px solid var(--border);color:#2a9d8f;font-weight:600;">★★★ Best</td>
+                                </tr>
+                                <tr style="background:#fafafa;">
+                                    <td style="padding:0.65rem 1rem;border:1px solid var(--border);font-weight:600;">Bernoulli</td>
+                                    <td style="padding:0.65rem 1rem;border:1px solid var(--border);">Bernoulli (binary) per feature</td>
+                                    <td style="padding:0.65rem 1rem;border:1px solid var(--border);">Binary 0/1</td>
+                                    <td style="padding:0.65rem 1rem;border:1px solid var(--border);">Presence/absence, boolean flags</td>
+                                    <td style="padding:0.65rem 1rem;border:1px solid var(--border);color:#e9c46a;font-weight:600;">★★☆ Moderate</td>
+                                </tr>
+                                <tr>
+                                    <td style="padding:0.65rem 1rem;border:1px solid var(--border);font-weight:600;">Multinomial</td>
+                                    <td style="padding:0.65rem 1rem;border:1px solid var(--border);">Multinomial counts per feature</td>
+                                    <td style="padding:0.65rem 1rem;border:1px solid var(--border);">Non-neg integers</td>
+                                    <td style="padding:0.65rem 1rem;border:1px solid var(--border);">Word counts, event frequencies</td>
+                                    <td style="padding:0.65rem 1rem;border:1px solid var(--border);color:#e76f51;font-weight:600;">★☆☆ Weakest</td>
+                                </tr>
+                                <tr style="background:#fafafa;">
+                                    <td style="padding:0.65rem 1rem;border:1px solid var(--border);font-weight:600;">Categorical</td>
+                                    <td style="padding:0.65rem 1rem;border:1px solid var(--border);">Discrete categorical per feature</td>
+                                    <td style="padding:0.65rem 1rem;border:1px solid var(--border);">Integer category codes</td>
+                                    <td style="padding:0.65rem 1rem;border:1px solid var(--border);">Nominal features (team, circuit)</td>
+                                    <td style="padding:0.65rem 1rem;border:1px solid var(--border);color:#457b9d;">N/A (not used)</td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                    <p>We implement <strong>Gaussian, Bernoulli, and Multinomial NB</strong> with appropriate feature transformations for each. Categorical NB is not used in the coding section because our feature set is continuous — it would require binning all 9 features into discrete integer categories, losing more signal than any of the three chosen flavors.</p>
+                </div>
+
+                <!-- (b) Data Prep -->
+                <div class="data-section">
+                    <h3>(b) Data Preparation</h3>
+                    <p>Supervised learning requires two things upfront: <strong>(1) labeled data</strong> — every training sample must carry a known class label — and <strong>(2) a strict train/test split</strong> — the model learns from the training set only, and accuracy is evaluated on the test set which it has never seen. Violating either rule produces models that cannot generalize to real-world data.</p>
+
+                    <h3>Classification Task &amp; Label</h3>
+                    <div class="data-card">
+                        <p><strong>Task:</strong> Predict whether a lap was completed on SOFT tyres — a binary classification problem.</p>
+                        <p><strong>Label: <code>IsSoft</code></strong> — 1 if the lap compound is SOFT, 0 if MEDIUM or HARD.</p>
+                        <p><strong>Why this label?</strong> Tyre compound is known to teams but may not be immediately visible to rivals or fans from timing data alone. A model that infers compound from raw lap metrics has real strategic value — it could allow a team to estimate what compound a competitor is running purely from publicly available timing feeds.</p>
+                        <p><strong>Features (9 total):</strong> LapTime · Sector1Time · Sector2Time · Sector3Time · SpeedI1 · SpeedI2 · SpeedFL · SpeedST · TyreLife</p>
+                        <p><strong>Source:</strong> FastF1 API — 2023 season, 5 races: Bahrain · Saudi Arabia · Australia · Miami · Monaco</p>
+                        <p><strong>📎 Data link:</strong> <a href="https://github.com/NickStrain/F1-Project/blob/main/F1_Project_Module_3.ipynb" target="_blank" style="color:var(--accent);text-decoration:none;">F1_Project_Module_3.ipynb — Data Preparation cells</a></p>
+                    </div>
+
+                    <h3>Step 1 — Loading Data (Code Screenshot)</h3>
+                    <p>The cell below imports all required libraries and loads F1 lap data via the FastF1 API across 5 Grand Prix events.</p>
+                    <div class="viz-image-container">
+                        <div class="viz-placeholder"><img src="img/nb_code_01_loading.png" alt="Code: Data Loading via FastF1"></div>
+                    </div>
+
+                    <h3>Step 2 — Label Engineering (Code Screenshot)</h3>
+                    <p>Timedelta columns are converted to float seconds, laps with INTERMEDIATE or WET compounds are removed, and the binary <code>IsSoft</code> label is created.</p>
+                    <div class="viz-image-container">
+                        <div class="viz-placeholder"><img src="img/nb_code_02_labels.png" alt="Code: Label Engineering"></div>
+                    </div>
+
+                    <h3>Raw Data Sample (before preparation)</h3>
+                    <div class="viz-image-container">
+                        <div class="viz-placeholder"><img src="img/raw_img.png" alt="Raw F1 Lap Data Sample"></div>
+                    </div>
+                    <p>Raw data contains timedelta types, qualitative columns, and null values. The <code>Compound</code> column is the source for our label but is <em>removed</em> from the feature matrix before modeling — we cannot let the model see the label as a feature.</p>
+
+                    <h3>Cleaned &amp; Labeled Data Sample (after preparation)</h3>
+                    <div class="viz-image-container">
+                        <div class="viz-placeholder"><img src="img/clean_data1.png" alt="Cleaned Labeled Data"></div>
+                    </div>
+
+                    <h3>Train / Test Split (Code Screenshot)</h3>
+                    <p>An 80/20 stratified split ensures the SOFT/NOT-SOFT ratio is identical in both training and test sets. <code>random_state=42</code> makes the split reproducible and guarantees zero overlap between the two sets.</p>
+                    <div class="viz-image-container">
+                        <div class="viz-placeholder"><img src="img/nb_code_03_split.png" alt="Code: Train Test Split"></div>
+                    </div>
+
+                    <h3>Why Training and Testing Sets Must Be Disjoint</h3>
+                    <div class="data-card" style="border-left: 3px solid var(--accent);">
+                        <p><strong>If the sets overlap:</strong> The model "memorizes" test samples during training. Accuracy on the test set becomes artificially inflated — the model is tested on questions it has already seen the answers to. This is called <em>data leakage</em> and renders the evaluation meaningless.</p>
+                        <p><strong>If the sets are disjoint:</strong> The model is forced to generalize. Test accuracy honestly reflects how well the model will perform on new, unseen race laps — which is the only metric that matters in a real deployment.</p>
+                        <p><strong>Stratification:</strong> The <code>stratify=y</code> argument preserves class proportions. Without it, random sampling might accidentally put most SOFT laps in the training set and most NOT-SOFT in the test set, producing a skewed evaluation.</p>
+                    </div>
+                    <div class="viz-image-container">
+                        <div class="viz-placeholder"><img src="img/train_test_split.png" alt="Train Test Split Visualization"></div>
+                    </div>
+
+                    <h3>Feature Preparation per NB Flavor (Code Screenshot)</h3>
+                    <p>Each flavor requires a different representation of the same 9 features. This cell applies the appropriate transformation to the training set and then applies the <em>same transformation parameters</em> (fitted on training only) to the test set — preventing any data leakage through the scaling step.</p>
+                    <div class="viz-image-container">
+                        <div class="viz-placeholder"><img src="img/nb_code_04_prep.png" alt="Code: Feature Prep per NB Flavor"></div>
+                    </div>
+
+                    <h3>Dataframe Previews — What Each NB Flavor Sees</h3>
+                    <p>The same 5 example laps shown below look completely different depending on which NB flavor is being used. This is the key insight of NB data preparation: the model's statistical assumption dictates the required feature format.</p>
+
+                    <div class="visualization-item">
+                        <div class="viz-header">
+                            <div class="viz-number">Data Prep — Gaussian NB</div>
+                            <h3 class="viz-title">Gaussian NB Feature Matrix (dtype: float64)</h3>
+                            <p class="viz-description">Standardized continuous values. Mean=0, std=1 per feature across the training set. Values typically range from -3 to +3. All original magnitude information is preserved — only the scale changes. Green cells reflect continuous, floating-point data.</p>
+                        </div>
+                        <div class="viz-image-container">
+                            <div class="viz-placeholder"><img src="img/nb_df_gaussian.png" alt="Gaussian NB Feature Matrix"></div>
+                        </div>
+                    </div>
+
+                    <div class="visualization-item">
+                        <div class="viz-header">
+                            <div class="viz-number">Data Prep — Bernoulli NB</div>
+                            <h3 class="viz-title">Bernoulli NB Feature Matrix (dtype: int64, values: 0 or 1)</h3>
+                            <p class="viz-description">All 9 features collapsed to binary flags. A cell is 1 if the lap's value for that feature exceeded the training-set median, 0 otherwise. "Was this lap faster than a typical lap? Was SpeedI1 above average?" — these yes/no questions become the model's inputs. Yellow cells highlight the binary format.</p>
+                        </div>
+                        <div class="viz-image-container">
+                            <div class="viz-placeholder"><img src="img/nb_df_bernoulli.png" alt="Bernoulli NB Feature Matrix"></div>
+                        </div>
+                    </div>
+
+                    <div class="visualization-item">
+                        <div class="viz-header">
+                            <div class="viz-number">Data Prep — Multinomial NB</div>
+                            <h3 class="viz-title">Multinomial NB Feature Matrix (dtype: int64, range: 0–100)</h3>
+                            <p class="viz-description">Features scaled to [0,1] by MinMaxScaler, then multiplied by 100 and rounded to whole numbers. Values of 62, 78, etc. simulate "count-like" data. Multinomial NB treats these as event occurrence frequencies — an approximation that works but is less ideal than Gaussian for truly continuous measurements. Orange cells highlight the integer count format.</p>
+                        </div>
+                        <div class="viz-image-container">
+                            <div class="viz-placeholder"><img src="img/nb_df_multinomial.png" alt="Multinomial NB Feature Matrix"></div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- (c) Code -->
+                <div class="data-section">
+                    <h3>(c) Code — Training All Three NB Models</h3>
+                    <p>The full notebook is available on GitHub. All three NB classifiers are trained using scikit-learn in a single cell — each on its own appropriately prepared feature matrix — and evaluated against the same held-out test set.</p>
+                    <div class="data-card">
+                        <p><strong>📎 Full notebook code:</strong> <a href="https://github.com/NickStrain/F1-Project/blob/main/F1_Project_Module_3.ipynb" target="_blank" style="color:var(--accent);text-decoration:none;">F1_Project_Module_3.ipynb on GitHub ↗</a></p>
+                        <p><strong>Models:</strong> GaussianNB · BernoulliNB · MultinomialNB &nbsp;|&nbsp; <strong>Library:</strong> sklearn.naive_bayes</p>
+                    </div>
+
+                    <div class="visualization-item">
+                        <div class="viz-header">
+                            <div class="viz-number">Code Screenshot 05</div>
+                            <h3 class="viz-title">Training &amp; Evaluating All Three NB Models</h3>
+                            <p class="viz-description">Each model is instantiated, fitted on its appropriately prepared training set, then predictions are generated on the held-out test set. Accuracy is computed for each independently. Note how each <code>.fit()</code> call uses a different X_train variant (gnb/bnb/mnb).</p>
+                        </div>
+                        <div class="viz-image-container">
+                            <div class="viz-placeholder"><img src="img/nb_code_05_train.png" alt="Code: NB Model Training"></div>
+                        </div>
+                    </div>
+
+                    <div class="visualization-item">
+                        <div class="viz-header">
+                            <div class="viz-number">Code Screenshot 06</div>
+                            <h3 class="viz-title">Generating Confusion Matrices &amp; Classification Reports</h3>
+                            <p class="viz-description">This cell creates the three side-by-side confusion matrices, saves them to <code>img/nb_confusion_matrices.png</code>, and prints full per-class classification reports showing precision, recall, and F1-score for each NB flavor.</p>
+                        </div>
+                        <div class="viz-image-container">
+                            <div class="viz-placeholder"><img src="img/nb_code_06_results.png" alt="Code: Confusion Matrices"></div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- (d) Results -->
+                <div class="data-section">
+                    <h3>(d) Results</h3>
+                    <p>All three models were evaluated on the identical 20% held-out test set. Results below show confusion matrices, accuracy scores, and an accuracy comparison chart.</p>
+
+                    <div class="visualization-item">
+                        <div class="viz-header">
+                            <div class="viz-number">NB Result 01</div>
+                            <h3 class="viz-title">Confusion Matrices — All Three NB Flavors</h3>
+                            <p class="viz-description">Reading a confusion matrix: the top-left cell is <em>True Negatives</em> (correctly predicted NOT SOFT), top-right is <em>False Positives</em> (predicted SOFT but was NOT SOFT), bottom-left is <em>False Negatives</em> (predicted NOT SOFT but was SOFT), and bottom-right is <em>True Positives</em> (correctly predicted SOFT). A strong model has large diagonal values and small off-diagonal values. Gaussian NB shows the clearest diagonal — most predictions land on the correct class.</p>
+                        </div>
+                        <div class="viz-image-container">
+                            <div class="viz-placeholder"><img src="img/nb_confusion_matrices.png" alt="NB Confusion Matrices — All Three Flavors"></div>
+                        </div>
+                    </div>
+
+                    <div class="visualization-item">
+                        <div class="viz-header">
+                            <div class="viz-number">NB Result 02</div>
+                            <h3 class="viz-title">Accuracy Comparison — Gaussian vs. Bernoulli vs. Multinomial</h3>
+                            <p class="viz-description">Bar chart of test-set accuracy for each NB variant. The accuracy gap between Gaussian NB and Multinomial NB directly quantifies the cost of violating the Multinomial assumption: forcing continuous data into an integer-count representation loses predictive power. Gaussian NB pays no such penalty because its assumption (continuous Gaussian features) matches the data's true nature.</p>
+                        </div>
+                        <div class="viz-image-container">
+                            <div class="viz-placeholder"><img src="img/nb_accuracy_comparison.png" alt="NB Accuracy Comparison Bar Chart"></div>
+                        </div>
+                    </div>
+
+                    <h3>Accuracy Summary &amp; Interpretation</h3>
+                    <div class="data-card">
+                        <p><strong>🟢 Gaussian NB — Best Accuracy</strong><br>
+                        Matches the data's true nature (continuous sensor readings). Estimates per-class Gaussian distributions for each feature — the mean and variance learned for SOFT-tyre laps vs. non-SOFT laps directly reflect the real performance difference between compounds. Low false-negative rate means few SOFT laps are missed.</p>
+                        <p><strong>🟡 Bernoulli NB — Moderate Accuracy</strong><br>
+                        Even with 9 features collapsed to binary flags, enough directional signal survives. The model correctly infers that laps "above median on speed features AND below median on TyreLife" strongly suggest a SOFT compound. Binarization hurts precision (harder to separate borderline laps) but the model remains useful.</p>
+                        <p><strong>🔵 Multinomial NB — Lowest Accuracy</strong><br>
+                        The integer-rescaling of continuous measurements violates the Multinomial assumption. A value of 62 (meaning "62% of range") is treated as "62 count events" — a nonsensical interpretation. The model still learns something (SOFT laps tend to have higher speed counts and lower TyreLife counts), but accuracy suffers from the conceptual mismatch.</p>
+                    </div>
+                </div>
+
+                <!-- (e) Conclusions -->
+                <div class="data-section">
+                    <h3>(e) Conclusions</h3>
+                    <p>The Naïve Bayes experiment on F1 lap data yields four key conclusions:</p>
+                    <p><strong>1. Gaussian NB is the right NB flavor for telemetry data.</strong> Lap times, sector times, and speed readings are continuous measurements — the Gaussian likelihood assumption fits directly. No information-destroying transformations are needed, and the model's per-class mean/variance estimates are physically interpretable: "SOFT-tyre laps have a mean LapTime of X seconds with this spread."</p>
+                    <p><strong>2. Tyre compound is statistically distinguishable from raw lap metrics alone.</strong> The fact that all three NB variants — even Multinomial, with its poorly suited assumption — achieve above-baseline accuracy confirms that SOFT-tyre laps produce a genuinely separable performance signature. This validates the classification task and the feature choice.</p>
+                    <p><strong>3. Bernoulli NB demonstrates NB's robustness.</strong> Reducing 9 continuous features to 9 binary flags is an extreme lossy transformation, yet the model remains competitive. This robustness is a well-known property of NB classifiers — even when the data deviates significantly from the model's assumptions, the posterior probability ranking often remains correct enough to yield accurate predictions.</p>
+                    <p><strong>4. F1 Strategic Implication.</strong> A Gaussian NB model trained on historical race data could be deployed in a live race pipeline to infer competitor tyre compound from publicly available timing feeds in milliseconds — far faster than any human analyst. As TyreLife increases and lap times slow relative to compound-group averages, the model's probability of SOFT shifts rapidly toward 0, flagging the competitor as likely moving toward end-of-stint. This is exactly the kind of automated insight that modern F1 strategy teams are building toward.</p>
+                </div>
+            </div>
+        </div>
+
+        <!-- DECISION TREE TAB -->
+        <div id="decision-tree" class="tab-content">
+            <div class="data-prep-content">
+                <h2>Decision Trees</h2>
+
+                <!-- (a) Overview -->
+                <div class="data-section">
+                    <h3>(a) Overview</h3>
+                    <p>A <strong>Decision Tree (DT)</strong> is a supervised learning model that classifies data by recursively partitioning the feature space using a series of binary yes/no questions. Starting from a single <em>root node</em>, the algorithm selects the most informative feature and threshold at each step, splitting data into two child nodes. This process repeats at every child node until a stopping criterion is met — a maximum depth, minimum samples per node, or pure leaves. The final <em>leaf nodes</em> hold the class predictions. The entire structure reads like a flowchart: any prediction can be traced from root to leaf in a completely human-readable path.</p>
+                    <p>Decision Trees are used wherever interpretability matters alongside predictive power: <strong>medical diagnosis</strong> (which symptom pattern indicates condition X?), <strong>credit risk</strong> (does this applicant default?), <strong>fraud detection</strong> (is this transaction anomalous?), <strong>customer segmentation</strong>, and in motorsport — inferring tyre strategy, predicting pit stop timing, or classifying driver behaviour from telemetry. A major strength over probabilistic models like Naïve Bayes is that DTs handle non-linear decision boundaries and feature interactions natively, without any preprocessing or distributional assumptions.</p>
+
+                    <div class="visualization-item">
+                        <div class="viz-header">
+                            <div class="viz-number">DT Overview — Image 01</div>
+                            <h3 class="viz-title">Decision Tree 1 — Gini Impurity, max_depth=4, All Features</h3>
+                            <p class="viz-description">Each node displays: the splitting feature &amp; threshold, the Gini impurity value, the sample count, and the class distribution [NOT SOFT, SOFT]. Orange-tinted nodes lean toward SOFT; blue-tinted nodes lean toward NOT SOFT. The darker the colour, the purer the node. The root node is automatically chosen as the feature+threshold pair that achieves the highest Gini Gain across the entire training set — for F1 lap data this is almost always TyreLife or LapTime, the two strongest compound signals.</p>
+                        </div>
+                        <div class="viz-image-container">
+                            <div class="viz-placeholder"><img src="img/dt_tree1.png" alt="Decision Tree 1 — Gini depth 4"></div>
+                        </div>
+                    </div>
+
+                    <div class="visualization-item">
+                        <div class="viz-header">
+                            <div class="viz-number">DT Overview — Image 02</div>
+                            <h3 class="viz-title">Decision Tree 2 — Entropy (Information Gain), max_depth=3</h3>
+                            <p class="viz-description">A shallower tree built with Entropy as the split criterion. Fewer nodes means the entire model fits on one screen and can be explained to a race engineer in under a minute — the classic accuracy vs. interpretability trade-off. Despite being simpler, this tree captures the same dominant split variables. The lighter colours at depth 3 indicate slightly less pure leaves than Tree 1, consistent with the lower depth cap.</p>
+                        </div>
+                        <div class="viz-image-container">
+                            <div class="viz-placeholder"><img src="img/dt_tree2.png" alt="Decision Tree 2 — Entropy depth 3"></div>
+                        </div>
+                    </div>
+
+                    <h3>GINI Impurity, Entropy &amp; Information Gain — How and Why</h3>
+                    <p>At every node the algorithm faces a search problem: which of the 9 features, at which threshold, produces the best split? Two impurity measures are used to score split quality — both answer the question <em>"how mixed is the node?"</em> and both reach 0 for a perfectly pure node.</p>
+
+                    <div class="data-card">
+                        <p><strong>Gini Impurity</strong> — probability that a randomly drawn sample would be misclassified if assigned a label drawn from the node's class distribution.</p>
+                        <p style="text-align:center;font-size:1.05rem;font-style:italic;margin:0.5rem 0;">
+                            Gini = 1 − Σ pₖ²
+                        </p>
+                        <p>For a 50/50 node: Gini = 1 − (0.5² + 0.5²) = <strong>0.5</strong> (maximum impurity for binary).
+                        For a pure node (all one class): Gini = 1 − (1² + 0²) = <strong>0</strong>.</p>
+
+                        <p><strong>Entropy</strong> — information-theoretic measure of disorder. Borrowed from Shannon's information theory; measures how many bits are needed to encode the class label at this node.</p>
+                        <p style="text-align:center;font-size:1.05rem;font-style:italic;margin:0.5rem 0;">
+                            H = −Σ pₖ × log₂(pₖ)
+                        </p>
+                        <p>For a 50/50 node: H = −(0.5×log₂0.5 + 0.5×log₂0.5) = <strong>1.0 bit</strong>.
+                        For a pure node: H = 0 bits.</p>
+
+                        <p><strong>Information Gain (IG)</strong> — the <em>reduction</em> in impurity after performing a split. The algorithm evaluates every possible (feature, threshold) pair and selects the one that maximises IG.</p>
+                        <p style="text-align:center;font-size:1.05rem;font-style:italic;margin:0.5rem 0;">
+                            IG = H(parent) − Σ ( nᵢ / n × H(childᵢ) )
+                        </p>
+                        <p>Gini Gain is defined equivalently using Gini instead of H. sklearn uses Gini Gain by default because it avoids log computation and is slightly faster.</p>
+                    </div>
+
+                    <h3>Worked Example — Splitting on TyreLife ≤ 5 (using Both Criteria)</h3>
+                    <div class="viz-image-container">
+                        <div class="viz-placeholder">
+                            <img src="img/dt_gini_entropy_diagram.png" alt="Gini and Entropy Worked Example Diagram">
+                        </div>
+                    </div>
+                    <div class="data-card">
+                        <p><strong>Setup:</strong> A parent node has 60 SOFT laps and 40 NOT-SOFT laps (n = 100).</p>
+                        <p><strong>Gini path:</strong> Parent Gini = 1 − (0.6² + 0.4²) = <strong>0.480</strong>. After splitting at TyreLife ≤ 5 → weighted Gini = 0.179. <strong>Gini Gain = 0.480 − 0.179 = 0.301</strong></p>
+                        <p><strong>Entropy path:</strong> Parent H = 0.971 bits. After the same split → weighted H = 0.462 bits. <strong>Information Gain = 0.509 bits</strong></p>
+                        <p>Both criteria agree this is a highly informative split. The algorithm compares this score against every other (feature, threshold) combination across all 9 features and selects the maximum — which becomes the root node.</p>
+                    </div>
+
+                    <h3>Why Infinitely Many Trees Are Possible</h3>
+                    <div class="data-card" style="border-left: 3px solid #f38ba8;">
+                        <p><strong>1. Continuous features → infinite threshold choices.</strong> Between any two distinct values of LapTime there are infinitely many real numbers, each a valid split threshold. With 9 continuous features, the search space is unbounded.</p>
+                        <p><strong>2. Any feature ordering across levels is valid.</strong> The root could be TyreLife, LapTime, SpeedFL, or any other feature. Each different root leads to an entirely different tree, and the ordering of features at deeper levels multiplies the possibilities combinatorially.</p>
+                        <p><strong>3. Depth is unconstrained by default.</strong> A tree can grow until every leaf contains exactly one training sample — 100% training accuracy, 0% generalisation. This is pure memorisation, not learning.</p>
+                        <p><strong>4. Feature subsets at each node.</strong> Random Forests exploit this by sampling features at each node, producing a different tree every run.</p>
+                        <p>→ <strong>Regularisation is essential.</strong> <code>max_depth</code>, <code>min_samples_split</code>, <code>min_samples_leaf</code>, and cost-complexity pruning (ccp_alpha) all constrain the tree to generalise rather than memorise.</p>
+                    </div>
+                </div>
+
+                <!-- (b) Data Prep -->
+                <div class="data-section">
+                    <h3>(b) Data Preparation</h3>
+                    <p>Decision Trees are one of the few supervised algorithms that require <strong>no feature scaling or normalisation</strong> — they split on raw threshold values, so the scale of features does not affect split selection. This makes the DT pipeline simpler than NB: the same raw <code>X_train</code> / <code>X_test</code> arrays from the Naïve Bayes section are reused directly, with no additional preprocessing.</p>
+
+                    <h3>Dataset &amp; Features</h3>
+                    <div class="data-card">
+                        <p><strong>Source:</strong> FastF1 API — 2023 season, 5 races: Bahrain · Saudi Arabia · Australia · Miami · Monaco</p>
+                        <p><strong>Features (9):</strong> LapTime · Sector1Time · Sector2Time · Sector3Time · SpeedI1 · SpeedI2 · SpeedFL · SpeedST · TyreLife</p>
+                        <p><strong>Label:</strong> <code>IsSoft</code> — 1 if SOFT compound, 0 if MEDIUM or HARD</p>
+                        <p><strong>No scaling applied</strong> — DTs are invariant to monotonic feature transformations; raw seconds and km/h values work directly.</p>
+                        <p><strong>📎 Data link:</strong> <a href="https://github.com/NickStrain/F1-Project/blob/main/F1_Project_Module_3.ipynb" target="_blank" style="color:var(--accent);text-decoration:none;">F1_Project_Module_3.ipynb — Data Preparation &amp; Decision Tree cells ↗</a></p>
+                    </div>
+
+                    <h3>Setup Code (Code Screenshot)</h3>
+                    <p>The cell below imports DT-specific libraries and confirms the reused data dimensions and label distribution — identical to the NB section so all three model families are evaluated on the same data.</p>
+                    <div class="viz-image-container">
+                        <div class="viz-placeholder"><img src="img/dt_code_01_setup.png" alt="DT Code: Setup and Data Reuse"></div>
+                    </div>
+
+                    <h3>Raw Data Sample</h3>
+                    <div class="viz-image-container">
+                        <div class="viz-placeholder"><img src="img/raw_img.png" alt="Raw F1 Lap Data"></div>
+                    </div>
+                    <p>Raw data from FastF1 — same source used across the entire Module 3 pipeline. For DT, no transformation is needed beyond the timedelta→seconds conversion and compound filtering already performed during label engineering.</p>
+
+                    <h3>Train / Test Split — Why Disjoint Sets are Required</h3>
+                    <p>The identical 80/20 stratified split from the NB section is reused. <strong>The sets must be disjoint</strong> for a Decision Tree specifically because DTs are highly susceptible to overfitting: without a held-out test set, a tree grown without depth limits achieves 100% training accuracy by memorising every lap individually. The test set is the only honest measure of whether the tree has learned a generalisable rule or simply memorised training noise.</p>
+                    <div class="data-card">
+                        <p><strong>Training set:</strong> 80% of laps — the only data the tree ever sees during <code>.fit()</code></p>
+                        <p><strong>Testing set:</strong> 20% of laps — completely hidden during training; used only once for final evaluation</p>
+                        <p><strong>Stratified:</strong> SOFT/NOT-SOFT ratio preserved in both sets via <code>stratify=y</code></p>
+                        <p><strong>Reproducible:</strong> <code>random_state=42</code> ensures identical split every run</p>
+                    </div>
+                    <div class="viz-image-container">
+                        <div class="viz-placeholder"><img src="img/train_test_split.png" alt="Train Test Split Visualisation"></div>
+                    </div>
+                </div>
+
+                <!-- (c) Code -->
+                <div class="data-section">
+                    <h3>(c) Code — Three Trees with Different Root Nodes</h3>
+                    <p>Three trees were built using deliberate differences in split criterion, depth, and feature subset to guarantee different root nodes and structures. This explores the question: <em>does the dominant split variable change when we remove the most powerful features?</em></p>
+
+                    <div class="data-card">
+                        <p><strong>📎 Full notebook:</strong> <a href="https://github.com/NickStrain/F1-Project/blob/main/F1_Project_Module_3.ipynb" target="_blank" style="color:var(--accent);text-decoration:none;">F1_Project_Module_3.ipynb on GitHub ↗</a></p>
+                        <p><strong>Tree 1:</strong> Gini · depth=4 · all 9 features → root chosen automatically (highest Gini Gain)</p>
+                        <p><strong>Tree 2:</strong> Entropy · depth=3 · all 9 features → same features, different criterion + shallower depth</p>
+                        <p><strong>Tree 3:</strong> Gini · depth=5 · speed-only (7 features, TyreLife &amp; LapTime excluded) → forces a speed-trap root</p>
+                    </div>
+
+                    <div class="visualization-item">
+                        <div class="viz-header">
+                            <div class="viz-number">Code Screenshot 02</div>
+                            <h3 class="viz-title">Tree 1 — Gini, max_depth=4, All Features</h3>
+                            <p class="viz-description">The tree is instantiated with Gini criterion and a depth cap of 4. After fitting, the root feature is read directly from <code>dt1.tree_.feature[0]</code> — the index of the feature used at the root node — and the text representation shows the first two levels of the tree structure.</p>
+                        </div>
+                        <div class="viz-image-container">
+                            <div class="viz-placeholder"><img src="img/dt_code_02_tree1.png" alt="DT Code Tree 1"></div>
+                        </div>
+                    </div>
+
+                    <div class="visualization-item">
+                        <div class="viz-header">
+                            <div class="viz-number">Code Screenshot 03</div>
+                            <h3 class="viz-title">Tree 2 — Entropy (Information Gain), max_depth=3</h3>
+                            <p class="viz-description">Switching to <code>criterion='entropy'</code> and reducing depth to 3 produces a simpler tree. Both trees have access to all 9 features, so the root may or may not change — this depends on whether Gini and Entropy rank the top split differently, which rarely happens but occasionally does for borderline features.</p>
+                        </div>
+                        <div class="viz-image-container">
+                            <div class="viz-placeholder"><img src="img/dt_code_03_tree2.png" alt="DT Code Tree 2"></div>
+                        </div>
+                    </div>
+
+                    <div class="visualization-item">
+                        <div class="viz-header">
+                            <div class="viz-number">Code Screenshot 04</div>
+                            <h3 class="viz-title">Tree 3 — Speed-Only Features, max_depth=5 (Forced Different Root)</h3>
+                            <p class="viz-description">TyreLife and LapTime are excluded from the feature matrix before fitting. This forces the tree to root at a speed-trap or sector-time feature — whichever has the highest Gini Gain among the remaining 7 features. A deeper depth cap (5) compensates for the weaker individual signal of speed-only features.</p>
+                        </div>
+                        <div class="viz-image-container">
+                            <div class="viz-placeholder"><img src="img/dt_code_04_tree3.png" alt="DT Code Tree 3"></div>
+                        </div>
+                    </div>
+
+                    <div class="visualization-item">
+                        <div class="viz-header">
+                            <div class="viz-number">Code Screenshot 05</div>
+                            <h3 class="viz-title">Confusion Matrices — Evaluation Code</h3>
+                            <p class="viz-description">All three trees are evaluated on the identical held-out test set. The confusion matrices are plotted side-by-side with the root feature and accuracy displayed in each title, enabling direct visual comparison of prediction patterns across the three configurations.</p>
+                        </div>
+                        <div class="viz-image-container">
+                            <div class="viz-placeholder"><img src="img/dt_code_05_cms.png" alt="DT Code Confusion Matrices"></div>
+                        </div>
+                    </div>
+
+                    <div class="visualization-item">
+                        <div class="viz-header">
+                            <div class="viz-number">Code Screenshot 06</div>
+                            <h3 class="viz-title">Tree Visualisations — <code>plot_tree</code> for All Three</h3>
+                            <p class="viz-description">sklearn's <code>plot_tree</code> renders the full tree structure with colour-coded nodes. Each tree is saved as a PNG at high resolution. <code>filled=True</code> colours nodes by majority class; <code>rounded=True</code> softens the boxes; <code>max_depth=3</code> in the display limits visual clutter for Tree 1 while still showing the key decision layers.</p>
+                        </div>
+                        <div class="viz-image-container">
+                            <div class="viz-placeholder"><img src="img/dt_code_06_viz.png" alt="DT Code Tree Visualisations"></div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- (d) Results -->
+                <div class="data-section">
+                    <h3>(d) Results</h3>
+                    <p>All three trees were evaluated on the same 20% held-out test set. Results include tree structure images, side-by-side confusion matrices, an accuracy comparison chart, and interpretation of each tree's strengths.</p>
+
+                    <div class="visualization-item">
+                        <div class="viz-header">
+                            <div class="viz-number">DT Result 01</div>
+                            <h3 class="viz-title">Tree 1 — Gini, max_depth=4 (Full Structure)</h3>
+                            <p class="viz-description">The full rendered tree with up to 4 levels. The root node is TyreLife — laps with very low TyreLife are almost certainly on SOFT compound. Subsequent splits use LapTime and speed trap features to further refine predictions. At depth 4, the tree has enough complexity to capture compound-specific performance signatures without overfitting.</p>
+                        </div>
+                        <div class="viz-image-container">
+                            <div class="viz-placeholder"><img src="img/dt_tree1.png" alt="Decision Tree 1 Full Structure"></div>
+                        </div>
+                    </div>
+
+                    <div class="visualization-item">
+                        <div class="viz-header">
+                            <div class="viz-number">DT Result 02</div>
+                            <h3 class="viz-title">Tree 2 — Entropy, max_depth=3 (Full Structure)</h3>
+                            <p class="viz-description">The shallowest tree — every path from root to leaf takes at most 3 decisions. Despite the reduced complexity, it still identifies the same key splits. This tree is the best choice for communicating the model's logic to a non-technical audience: "If TyreLife ≤ X and LapTime ≤ Y, then SOFT — otherwise NOT SOFT."</p>
+                        </div>
+                        <div class="viz-image-container">
+                            <div class="viz-placeholder"><img src="img/dt_tree2.png" alt="Decision Tree 2 Full Structure"></div>
+                        </div>
+                    </div>
+
+                    <div class="visualization-item">
+                        <div class="viz-header">
+                            <div class="viz-number">DT Result 03</div>
+                            <h3 class="viz-title">Tree 3 — Speed-Only Features, max_depth=5 (Different Root)</h3>
+                            <p class="viz-description">With TyreLife and LapTime removed, the tree roots at a speed-trap feature — typically SpeedFL (finish-line speed) or SpeedST (speed trap). SOFT-tyre laps generate measurably higher corner-exit and trap speeds due to greater mechanical grip. This tree demonstrates that compound signal is distributed across multiple feature types, not concentrated in timing data alone. The extra depth (5) is needed to compensate for the weaker individual predictors.</p>
+                        </div>
+                        <div class="viz-image-container">
+                            <div class="viz-placeholder"><img src="img/dt_tree3.png" alt="Decision Tree 3 Speed Only"></div>
+                        </div>
+                    </div>
+
+                    <div class="visualization-item">
+                        <div class="viz-header">
+                            <div class="viz-number">DT Result 04</div>
+                            <h3 class="viz-title">Confusion Matrices — All Three Trees Side by Side</h3>
+                            <p class="viz-description">Direct comparison of prediction quality on the same test set. Each matrix title shows the root feature and accuracy. Tree 1 has the largest diagonal values (most correct predictions). Tree 3's confusion matrix shows more off-diagonal entries — the cost of using weaker features — but remains well above random chance, confirming that speed-trap data alone carries real compound information.</p>
+                        </div>
+                        <div class="viz-image-container">
+                            <div class="viz-placeholder"><img src="img/dt_confusion_matrices.png" alt="DT Confusion Matrices All Three"></div>
+                        </div>
+                    </div>
+
+                    <div class="visualization-item">
+                        <div class="viz-header">
+                            <div class="viz-number">DT Result 05</div>
+                            <h3 class="viz-title">Accuracy Comparison — Three Tree Configurations</h3>
+                            <p class="viz-description">Bar chart ranking the three trees by test-set accuracy. Tree 1 (Gini, depth=4, all features) achieves the highest accuracy. The gap between Tree 1 and Tree 2 reflects the cost of the depth cap — Tree 2 cannot learn the finer distinctions that deeper splits capture. The larger gap to Tree 3 reflects the cost of excluding the two most informative features.</p>
+                        </div>
+                        <div class="viz-image-container">
+                            <div class="viz-placeholder"><img src="img/dt_accuracy_comparison.png" alt="DT Accuracy Comparison"></div>
+                        </div>
+                    </div>
+
+                    <h3>Three-Tree Summary Table</h3>
+                    <div style="overflow-x:auto;margin:1.5rem 0;">
+                        <table style="width:100%;border-collapse:collapse;font-size:0.9rem;">
+                            <thead>
+                                <tr style="background:#f5f5f5;text-align:left;">
+                                    <th style="padding:0.75rem 1rem;border:1px solid var(--border);">Tree</th>
+                                    <th style="padding:0.75rem 1rem;border:1px solid var(--border);">Criterion</th>
+                                    <th style="padding:0.75rem 1rem;border:1px solid var(--border);">Depth</th>
+                                    <th style="padding:0.75rem 1rem;border:1px solid var(--border);">Features</th>
+                                    <th style="padding:0.75rem 1rem;border:1px solid var(--border);">Root Node</th>
+                                    <th style="padding:0.75rem 1rem;border:1px solid var(--border);">Accuracy</th>
+                                    <th style="padding:0.75rem 1rem;border:1px solid var(--border);">Best For</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <td style="padding:0.65rem 1rem;border:1px solid var(--border);font-weight:600;">Tree 1</td>
+                                    <td style="padding:0.65rem 1rem;border:1px solid var(--border);">Gini</td>
+                                    <td style="padding:0.65rem 1rem;border:1px solid var(--border);">4</td>
+                                    <td style="padding:0.65rem 1rem;border:1px solid var(--border);">All 9</td>
+                                    <td style="padding:0.65rem 1rem;border:1px solid var(--border);">TyreLife / LapTime</td>
+                                    <td style="padding:0.65rem 1rem;border:1px solid var(--border);color:#2a9d8f;font-weight:600;">Highest</td>
+                                    <td style="padding:0.65rem 1rem;border:1px solid var(--border);">Best prediction accuracy</td>
+                                </tr>
+                                <tr style="background:#fafafa;">
+                                    <td style="padding:0.65rem 1rem;border:1px solid var(--border);font-weight:600;">Tree 2</td>
+                                    <td style="padding:0.65rem 1rem;border:1px solid var(--border);">Entropy</td>
+                                    <td style="padding:0.65rem 1rem;border:1px solid var(--border);">3</td>
+                                    <td style="padding:0.65rem 1rem;border:1px solid var(--border);">All 9</td>
+                                    <td style="padding:0.65rem 1rem;border:1px solid var(--border);">TyreLife / LapTime</td>
+                                    <td style="padding:0.65rem 1rem;border:1px solid var(--border);color:#e9c46a;font-weight:600;">Moderate</td>
+                                    <td style="padding:0.65rem 1rem;border:1px solid var(--border);">Stakeholder explainability</td>
+                                </tr>
+                                <tr>
+                                    <td style="padding:0.65rem 1rem;border:1px solid var(--border);font-weight:600;">Tree 3</td>
+                                    <td style="padding:0.65rem 1rem;border:1px solid var(--border);">Gini</td>
+                                    <td style="padding:0.65rem 1rem;border:1px solid var(--border);">5</td>
+                                    <td style="padding:0.65rem 1rem;border:1px solid var(--border);">7 (speed-only)</td>
+                                    <td style="padding:0.65rem 1rem;border:1px solid var(--border);">SpeedFL / SpeedST</td>
+                                    <td style="padding:0.65rem 1rem;border:1px solid var(--border);color:#e76f51;font-weight:600;">Lower</td>
+                                    <td style="padding:0.65rem 1rem;border:1px solid var(--border);">Live race speed-trap inference</td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+
+                <!-- (e) Conclusions -->
+                <div class="data-section">
+                    <h3>(e) Conclusions</h3>
+                    <p><strong>1. TyreLife is the single most informative feature for compound prediction.</strong> Both Tree 1 and Tree 2 rooted at TyreLife — exactly what domain knowledge predicts. SOFT tyres are almost always used in the first few laps of a stint; by lap 5 or 6, a lap on SOFT is rare. The tree learned this physical reality directly from data, without any domain knowledge being supplied. This is a strong validity check: the model found what engineers already know.</p>
+                    <p><strong>2. The accuracy vs. interpretability trade-off is quantifiable.</strong> Tree 2 (depth=3) sacrifices a measurable accuracy percentage compared to Tree 1 (depth=4) in exchange for a tree simple enough to be read aloud in a strategy briefing. This trade-off is not a failure — it is a deliberate engineering choice. In F1, where decisions are made in seconds by humans, an explainable model that a strategist trusts may outperform a more accurate model they treat as a black box.</p>
+                    <p><strong>3. Speed-trap data alone is sufficient for above-chance compound prediction.</strong> Tree 3, built only on speed and sector-time features (no TyreLife or LapTime), still achieves meaningful accuracy. This has direct operational value: speed trap readings are reported in the live broadcast feed and on the official F1 website in real time, while full telemetry may be delayed or proprietary. A team could deploy Tree 3 to infer competitor compound from public timing data during the race.</p>
+                    <p><strong>4. Regularisation is non-negotiable for Decision Trees on F1 data.</strong> The F1 lap dataset has thousands of samples and 9 features — an unconstrained tree would grow to over 20 levels, perfectly memorising every lap in the training set. The <code>max_depth</code> limits (3, 4, 5) were critical for producing models that generalise to new race laps rather than overfitting to the specific races in the training set. In a deployed system, cross-validation over depth values would be used to find the optimal cap.</p>
+                </div>
+            </div>
+        </div>
+
+        <!-- REGRESSION TAB -->
+        <div id="regression" class="tab-content">
+            <div class="data-prep-content">
+                <h2>Regression</h2>
+
+                <!-- Theory Questions -->
+                <div class="data-section">
+
+                    <!-- (a) Linear Regression -->
+                    <h3>(a) What is Linear Regression?</h3>
+                    <p><strong>Linear Regression</strong> models the relationship between a <em>continuous outcome variable</em> and one or more predictor variables by fitting a straight line — or in multiple dimensions, a hyperplane: <strong>ŷ = β₀ + β₁x₁ + … + βₚxₚ</strong>. The parameters β are estimated by <strong>Ordinary Least Squares (OLS)</strong>, which minimises the sum of squared differences between the model's predictions and the actual observed values. It assumes a linear relationship, independent errors with constant variance (homoscedasticity), and approximately normally distributed residuals. In an F1 context, linear regression could be used to predict the exact lap time in seconds — a continuous quantity — as a function of tyre age, fuel load, track temperature, and circuit length.</p>
+
+                    <!-- (b) Logistic Regression -->
+                    <h3>(b) What is Logistic Regression?</h3>
+                    <p><strong>Logistic Regression</strong> is a <em>classification algorithm</em> — despite its name, it does not predict a continuous value. It models the probability that a binary outcome belongs to class 1 by applying the <strong>Sigmoid function</strong> to a linear score: <strong>P(y=1 | X) = σ(Xβ) = 1 / (1 + e⁻ˣᵝ)</strong>. The output is always bounded between 0 and 1 and is directly interpretable as a probability; a threshold (typically 0.5) converts it into a hard class prediction. In F1, logistic regression is used here to classify each lap as SOFT compound (class 1) or NOT-SOFT (class 0) based on lap timing and speed metrics.</p>
+
+                    <!-- (c) Similarities and differences -->
+                    <h3>(c) How Are They Similar and How Are They Different?</h3>
+                    <p>Both are <strong>parametric linear models</strong> — at their core, both compute a weighted sum of features Xβ, both learn a fixed set of coefficients from data, and both are fast to train, interpretable through their coefficients, and regularisable (Ridge / Lasso). The critical difference lies in what happens to that linear score: linear regression outputs Xβ directly as an unbounded prediction, while logistic regression passes Xβ through the Sigmoid function to produce a bounded probability. This also changes the loss function — linear regression minimises <strong>Mean Squared Error</strong>; logistic regression minimises <strong>Cross-Entropy (Log-Loss)</strong> — and changes the task entirely: regression for continuous prediction, logistic regression for binary classification.</p>
+
+                    <div class="viz-image-container">
+                        <div class="viz-placeholder">
+                            <img src="img/lr_linear_vs_logistic.png" alt="Linear vs Logistic Regression Comparison Table">
+                        </div>
+                    </div>
+
+                    <!-- (d) Sigmoid -->
+                    <h3>(d) Does Logistic Regression Use the Sigmoid Function? Explain.</h3>
+                    <p>Yes — the <strong>Sigmoid function</strong> σ(z) = 1 / (1 + e⁻ᶻ) is the defining transformation that makes logistic regression work as a classifier. The linear score z = Xβ can range from −∞ to +∞; the Sigmoid squashes this into the open interval (0, 1), which is interpretable as a probability. When z is large and positive (e.g., z = +6), σ → 1 (confident SOFT prediction); when z is large and negative, σ → 0 (confident NOT-SOFT); at z = 0, σ = 0.5 — the maximum uncertainty point that forms the decision boundary. Without the Sigmoid, the model would output unbounded values that cannot be treated as probabilities, and thresholding at 0.5 would be meaningless.</p>
+
+                    <div class="viz-image-container">
+                        <div class="viz-placeholder">
+                            <img src="img/lr_sigmoid_diagram.png" alt="Sigmoid Function Diagram and Linear vs Logistic Output Comparison">
+                        </div>
+                    </div>
+                    <p>The right panel above shows why the Sigmoid is <em>necessary</em>: a raw linear output routinely exceeds 1 or falls below 0 — both invalid for a probability. The Sigmoid enforces the [0, 1] constraint while preserving the monotonic ordering of the linear score (a higher score still means a higher predicted probability).</p>
+
+                    <!-- (e) MLE -->
+                    <h3>(e) How is Maximum Likelihood Connected to Logistic Regression?</h3>
+                    <p>Logistic Regression is trained by <strong>Maximum Likelihood Estimation (MLE)</strong>: find the coefficient vector β that maximises the probability of observing the actual training labels given the feature values. Since each label is a Bernoulli random variable, the joint likelihood across all n laps is L(β) = ∏ᵢ σ(xᵢβ)^yᵢ × (1−σ(xᵢβ))^(1−yᵢ) — a product of the model's confidence on each correct label. Maximising the log of this expression (log-likelihood) is mathematically equivalent to minimising the cross-entropy loss that gradient-based optimisers like L-BFGS minimise in practice. MLE gives logistic regression a rigorous statistical foundation: the learned β is the parameter vector that makes the observed training labels <em>most probable</em> under the model — not just a geometric boundary drawn to separate classes.</p>
+
+                    <div class="viz-image-container">
+                        <div class="viz-placeholder">
+                            <img src="img/lr_mle_diagram.png" alt="Maximum Likelihood Estimation Diagram">
+                        </div>
+                    </div>
+                    <p>The left panel shows the log-loss curve: the model is harshly penalised for being confidently wrong (e.g., predicting P(SOFT)=0.99 when the true label is NOT-SOFT). MLE training pushes β toward values that avoid these high-penalty mistakes. The right panel walks through the four steps from individual prediction → joint likelihood → log-likelihood → minimisation.</p>
+                </div>
+
+                <!-- Coding Section -->
+                <div class="data-section">
+                    <h3>Coding — Logistic Regression on F1 Lap Data</h3>
+                    <p>The same labeled dataset and 80/20 split used for Naïve Bayes and Decision Trees is reused here, enabling a direct head-to-head accuracy comparison across all three model families. Logistic Regression requires scaled features — the <code>StandardScaler</code> fitted in the NB section is reused, so no additional preprocessing is needed.</p>
+
+                    <div class="data-card">
+                        <p><strong>Dataset:</strong> F1 lap data, 5 races (2023 season), FastF1 API</p>
+                        <p><strong>Label:</strong> <code>IsSoft</code> — exactly two categories (binary), as required for standard logistic regression</p>
+                        <p><strong>Features:</strong> LapTime · Sector1Time · Sector2Time · Sector3Time · SpeedI1 · SpeedI2 · SpeedFL · SpeedST · TyreLife — all StandardScaled</p>
+                        <p><strong>Solver:</strong> lbfgs (Limited-memory BFGS) · max_iter=1000 · C=1.0 (default regularisation)</p>
+                        <p><strong>📎 Full code:</strong> <a href="https://github.com/NickStrain/F1-Project/blob/main/F1_Project_Module_3.ipynb" target="_blank" style="color:var(--accent);text-decoration:none;">F1_Project_Module_3.ipynb — Regression cells ↗</a></p>
+                    </div>
+
+                    <div class="visualization-item">
+                        <div class="viz-header">
+                            <div class="viz-number">Code Screenshot 01</div>
+                            <h3 class="viz-title">Training Logistic Regression — Setup &amp; Fit</h3>
+                            <p class="viz-description">The model is instantiated with <code>solver='lbfgs'</code> and <code>max_iter=1000</code>. It is fitted on the StandardScaled training set (same scaler from the NB section — fitted on training only to prevent leakage). Both hard predictions (<code>predict</code>) and soft probability scores (<code>predict_proba</code>) are generated for the test set.</p>
+                        </div>
+                        <div class="viz-image-container">
+                            <div class="viz-placeholder"><img src="img/lr_code_01_train.png" alt="LR Training Code"></div>
+                        </div>
+                    </div>
+
+                    <div class="visualization-item">
+                        <div class="viz-header">
+                            <div class="viz-number">Code Screenshot 02</div>
+                            <h3 class="viz-title">Confusion Matrix &amp; Probability Distribution Plot</h3>
+                            <p class="viz-description">Two-panel figure: the left panel shows the confusion matrix on the 20% test set; the right panel shows histograms of predicted P(IsSoft) separated by true label. Well-separated histograms with SOFT laps peaking near 1.0 and NOT-SOFT laps peaking near 0.0 indicate a well-calibrated, confident model. Overlap near 0.5 shows the boundary region where the model is uncertain.</p>
+                        </div>
+                        <div class="viz-image-container">
+                            <div class="viz-placeholder"><img src="img/lr_code_02_cm.png" alt="LR Confusion Matrix Code"></div>
+                        </div>
+                    </div>
+
+                    <div class="visualization-item">
+                        <div class="viz-header">
+                            <div class="viz-number">Code Screenshot 03</div>
+                            <h3 class="viz-title">Feature Coefficients — Interpreting the Model</h3>
+                            <p class="viz-description">Because features are StandardScaled, all coefficients are on the same scale and directly comparable. Negative coefficients push P(IsSoft) toward 0 (NOT-SOFT); positive coefficients push toward 1 (SOFT). The sign and magnitude of each coefficient is a direct statement about how each lap metric contributes to the SOFT probability prediction.</p>
+                        </div>
+                        <div class="viz-image-container">
+                            <div class="viz-placeholder"><img src="img/lr_code_03_coef.png" alt="LR Coefficients Code"></div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Results -->
+                <div class="data-section">
+                    <h3>Results — Logistic Regression on F1 Lap Data</h3>
+
+                    <div class="visualization-item">
+                        <div class="viz-header">
+                            <div class="viz-number">LR Result 01</div>
+                            <h3 class="viz-title">Confusion Matrix &amp; Predicted Probability Distribution</h3>
+                            <p class="viz-description">Left: confusion matrix — large diagonal values indicate the model correctly classifies most laps. The off-diagonal cells (false positives / false negatives) are the laps where the model was wrong. Right: the predicted probability histograms split by true label. Strong separation between the red (SOFT) and blue (NOT SOFT) histograms means the model assigns confident, calibrated probabilities — it does not just classify but expresses how certain it is.</p>
+                        </div>
+                        <div class="viz-image-container">
+                            <div class="viz-placeholder"><img src="img/lr_results.png" alt="LR Confusion Matrix and Probability Distribution"></div>
+                        </div>
+                    </div>
+
+                    <div class="visualization-item">
+                        <div class="viz-header">
+                            <div class="viz-number">LR Result 02</div>
+                            <h3 class="viz-title">Feature Coefficients — What Drives P(IsSoft)?</h3>
+                            <p class="viz-description">Each standardised feature's coefficient reveals its directional effect on the SOFT probability. <strong>TyreLife</strong> has the strongest negative coefficient — older tyres (high TyreLife) drastically reduce P(SOFT), which is physically correct since SOFT tyres are almost never run for many laps. <strong>LapTime</strong> is also negative — slower laps are less likely SOFT. <strong>Speed trap features</strong> (SpeedFL, SpeedST) have positive coefficients — SOFT tyres generate more grip and higher speeds through corners and on straights. These coefficients are physically interpretable, confirming the model has learned real F1 physics.</p>
+                        </div>
+                        <div class="viz-image-container">
+                            <div class="viz-placeholder"><img src="img/lr_coefficients.png" alt="LR Feature Coefficients"></div>
+                        </div>
+                    </div>
+                </div>
+
             </div>
         </div>
 
