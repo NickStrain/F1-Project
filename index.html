@@ -62,22 +62,19 @@
         /* Tab Navigation */
         .tab-nav {
             display: flex;
+            flex-wrap: wrap;
             gap: 0;
             margin-top: 2rem;
             border-bottom: 1px solid var(--border);
-            overflow-x: auto;
-            -webkit-overflow-scrolling: touch;
-            scrollbar-width: none;
         }
-        .tab-nav::-webkit-scrollbar { display: none; }
 
         .tab-button {
             font-family: 'Inter', sans-serif;
-            padding: 1rem 2rem;
+            padding: 0.75rem 1.25rem;
             background: transparent;
             border: none;
             color: var(--text-light);
-            font-size: 0.95rem;
+            font-size: 0.875rem;
             font-weight: 500;
             cursor: pointer;
             position: relative;
@@ -318,6 +315,8 @@
                 <button class="tab-button" data-tab="naive-bayes">Naïve Bayes</button>
                 <button class="tab-button" data-tab="decision-tree">Decision Tree</button>
                 <button class="tab-button" data-tab="regression">Regression</button>
+                <button class="tab-button" data-tab="svm">SVM</button>
+                <button class="tab-button" data-tab="ensemble">Ensemble</button>
             </nav>
         </div>
     </header>
@@ -329,27 +328,27 @@
             <div class="intro-content">
                 <h2>Introduction</h2>
 
-                <p>Formula 1 racing represents the pinnacle of motorsport engineering and athletic performance, where milliseconds determine victory and defeat. The sport combines cutting-edge automotive technology, aerodynamic innovation, strategic decision-making, and human skill at speeds exceeding 350 kilometers per hour. Beyond the spectacle of racing, Formula 1 generates vast amounts of data from telemetry systems, timing sensors, and performance metrics that capture every aspect of car and driver performance. This data provides unprecedented opportunities to understand the factors that influence race outcomes, optimize team strategies, and predict competitive dynamics. The intersection of data science and motorsport has transformed how teams approach race preparation, real-time decision-making, and long-term development, making Formula 1 one of the most data-intensive sports in the world. Each Grand Prix weekend produces millions of data points from practice sessions, qualifying rounds, and race day, creating a rich analytical landscape for exploring performance patterns, technological advantages, and competitive strategies.</p>
+                <p>Imagine a sport where the difference between winning and losing is measured not in seconds, but in thousandths of a second. Where a single wrong decision — made in a split second at 200 miles per hour — can unravel months of preparation and cost a team a world championship. That is Formula 1, and it is unlike any other sport on the planet. Twenty drivers from ten teams chase each other across 24 different countries, racing on circuits that range from the sun-baked desert straights of Bahrain to the narrow, glamorous streets of Monaco. Each car costs over a hundred million dollars to develop, and the people behind it are some of the sharpest engineers and strategists on earth. But beneath the roar of the engines and the blur of the pit stops lies a quieter revolution — one driven entirely by data.</p>
 
-                <p>The significance of data analysis in Formula 1 extends beyond team operations to influence regulatory decisions, broadcast coverage, and fan engagement. Teams invest heavily in data infrastructure, employing hundreds of engineers and analysts who process telemetry data in real-time during races and conduct detailed post-race analysis to gain competitive advantages. Race strategy decisions regarding tire compounds, pit stop timing, fuel loads, and overtaking opportunities increasingly rely on sophisticated predictive models that synthesize historical performance data, real-time conditions, and competitor behavior. The sport's technical regulations evolve annually, creating new challenges and opportunities for teams to exploit data-driven insights in car development and race execution. Furthermore, the global nature of Formula 1, with races held across diverse circuits ranging from high-speed tracks like Monza to technical street circuits like Monaco, produces varied performance characteristics that demand adaptive analytical approaches. Understanding these patterns through comprehensive data analysis reveals how track characteristics, weather conditions, tire management, and technical innovations interact to determine competitive outcomes.</p>
-
-                <div class="intro-image">
-                    <img src="img\ferrari car.jpg">
-                </div>
-
-                <p>Current research in Formula 1 data science has explored various dimensions of race performance, including lap time prediction, optimal pit stop strategies, tire degradation modeling, and driver performance evaluation. Academic studies have applied machine learning techniques to predict race winners, classify driver skill levels, and optimize team strategies based on historical data patterns. Industry practitioners have developed sophisticated simulation tools that model race scenarios, enabling teams to test strategic options before making critical decisions during live races. The availability of public timing data through official channels and community-developed APIs like FastF1 has democratized access to Formula 1 telemetry, enabling researchers and enthusiasts to conduct independent analyses and develop innovative analytical methodologies. Despite these advances, significant opportunities remain to deepen understanding of performance factors, particularly in areas such as tire compound selection under varying conditions, the impact of aerodynamic regulations on competitive balance, and the quantification of driver contributions relative to car performance.</p>
-
-                <p>This data science project investigates Formula 1 racing performance through comprehensive analysis of the 2024 season, focusing on lap times, tire strategies, driver performance, and race dynamics across multiple Grand Prix events. The analysis examines how various factors including tire compound selection, tire degradation over race distance, track characteristics, and race phase influence lap time performance and competitive outcomes. By gathering and analyzing official timing data, this research seeks to uncover patterns in racing performance that enhance understanding of competitive dynamics. The project utilizes data gathered through the FastF1 API, which provides access to official Formula 1 timing data including lap times, sector times, speed measurements, tire information, and race positions, creating a robust foundation for multi-dimensional analysis.</p>
-
-                <p>Building on the exploratory analysis established in Module 1, this project now applies three advanced machine learning techniques to extract deeper insights from the data. Principal Component Analysis (PCA) is used to reduce dimensionality and identify the most important performance variables. Clustering methods — KMeans, Hierarchical, and DBSCAN — reveal natural groupings within lap data that illuminate strategic and performance patterns. Association Rule Mining (ARM) uncovers co-occurring strategic events across laps, revealing the hidden logic of tire strategy and race phase decisions. Together, these methods transform raw telemetry into actionable intelligence about what truly drives competitive outcomes in Formula 1.</p>
+                <p>Formula 1 has always been a sport of marginal gains, but in the modern era the margins have become almost impossibly small. The gap between pole position and tenth place in qualifying is often less than one second across an entire lap. A tyre that has completed twenty laps behaves differently from one that has completed five, and a team that understands that degradation curve better than its rivals can time a pit stop to steal track position without losing a single place on the road. Every Grand Prix weekend generates hundreds of millions of data points — from the angle of a steering wheel in a corner to the temperature of the brake disc, from the precise moment a throttle is pressed to the microscopic flex of a rear wing. Teams employ armies of engineers whose only job is to make sense of this flood of information and turn it into decisions that are made in real time, mid-race, with millions of people watching.</p>
 
                 <div class="intro-image">
-                    <img src="img\viz8_correlation_heatmap.png" alt="Correlation Heatmap of F1 Performance Variables">
+                    <img src="img/ferrari car.jpg" alt="Formula 1 Ferrari racing car">
                 </div>
 
-                <p>What makes Formula 1 truly extraordinary from an analytical perspective is that every single lap — across every driver, every team, and every circuit — tells the same fundamental story in a slightly different way. The tyre a driver is running on shapes everything: how fast the car can corner, how quickly it reaches the end of the straight, how much the lap time creeps upward as the rubber wears down. Across five races and hundreds of competitive laps, this story repeats itself with enough regularity that a well-designed analysis can learn to read it. When that learning reaches the point where a model can look at a lap's timing data alone — without being told the tyre compound — and correctly identify what that driver was running on, it is no longer just descriptive analysis. It has become prediction, and prediction is where data science becomes a genuine competitive tool.</p>
+                <p>At the heart of every race strategy sits one of the most fascinating and misunderstood decisions in sport: the tyre. Formula 1 tyres come in three compounds — Soft, Medium, and Hard — each offering a different balance between outright speed and longevity. Soft tyres are sticky, fast, and hungry; they give a driver electric pace for a handful of laps before they begin to fade. Hard tyres are conservative, slower over a single lap but capable of running for much longer before they need to be changed. Medium tyres sit between the two. Every team must decide which combination of compounds to use during the race, when to pit, and how to manage the pace to protect the tyres for as long as possible. Get it right and you win. Get it wrong and you watch the cars that started behind you sail past as your driver helplessly radios that his tyres "feel like they're driving on ice." The tyre strategy is where races are won and lost, and it is where this project focuses its attention.</p>
 
-                <p>As the project advances, a new and exciting question emerges: can the patterns hidden inside race data be used to actually <em>predict</em> what happens next? Every lap on a Formula 1 circuit tells a story — about how fresh the tyres are, how the car is behaving, how aggressive or conservative the driver's approach is, and how the broader race situation is evolving. Just as an experienced engineer can glance at a live timing screen and instinctively sense which team is managing tyres versus pushing flat-out, data can be used to build systems that make those same inferences automatically — and at a scale no human could match. The goal of this expanded analysis is not just to describe what happened in past races, but to develop an understanding capable of making informed predictions about what <em>will</em> happen, giving any team, analyst, or fan a sharper view into the strategic chess match that unfolds over 50-plus laps every Grand Prix weekend.</p>
+                <p>This project takes real race data from five Formula 1 Grands Prix — Bahrain, Saudi Arabia, Australia, Miami, and Monaco — and asks a deceptively simple question: can a computer learn to read the story a lap is telling? Specifically, can it look at nothing but the raw timing numbers from a single lap — how long each sector took, how fast the car was moving at the speed traps — and correctly identify which type of tyre was being used? This matters enormously in practice. During a live race, teams can see their competitors' lap times on a timing screen but do not always know immediately what compound their rivals are running. A system that could infer that information automatically, faster than any human analyst, would hand a team a genuine strategic advantage — a few seconds of advance notice that is enough to trigger a different pit stop decision and potentially win positions on the track.</p>
+
+                <div class="intro-image">
+                    <img src="img/viz4_tire_compound_performance.png" alt="Tyre compound lap time performance comparison">
+                </div>
+
+                <p>The data used in this project was collected through FastF1, a publicly available tool that taps into the official Formula 1 timing system. Every lap completed by every driver across five races was pulled and cleaned — thousands of laps in total, each described by nine measurements: the overall lap time, the time through each of the three track sectors, four speed-trap readings, and the number of laps already completed on those tyres. From this raw material, a full data science pipeline was built from the ground up. The journey began with exploring and visualising the data to understand its shape and patterns. It continued through grouping algorithms that could find structure without being told what to look for. And it arrived at its destination in the form of prediction engines — multiple different types of learning models, each trained to look at a lap's numbers and declare: <em>that driver was on Soft tyres.</em></p>
+
+                <p>What this project ultimately demonstrates is that the physical reality of Formula 1 racing leaves a clear and consistent fingerprint in the data. Soft-compound laps are genuinely different — faster, more aggressive, and shorter-lived — and that difference shows up in the numbers with remarkable clarity. The best prediction models built here identify the tyre compound correctly more than 95% of the time, using nothing more than the same lap time data that appears on every fan's timing app. That level of accuracy does not happen by accident. It means that tyre strategy, the great hidden chess game of Formula 1, is not as hidden as it might seem — at least not to a well-trained algorithm. This project is the story of how that algorithm was built, what it learned, and what it tells us about the sport.</p>
+
+                <p>The pages that follow walk through every stage of that story. The data preparation section shows how raw telemetry was cleaned and shaped. The visualisation and exploration sections reveal the patterns hiding in plain sight. The modelling sections — covering six different families of machine learning methods — document how each approach was applied, what each one found, and how their performances compared. And the conclusions section translates all of it back into plain language: what does this mean for Formula 1, for strategy, and for the idea that data can change the outcome of a race? The answer, it turns out, is quite a lot.</p>
 
                 <div class="questions-section">
                     <h3>Research Questions</h3>
@@ -990,99 +989,25 @@
             <div class="conclusions-content">
                 <h2>Conclusions</h2>
 
-                <p>This project applied the full Data Science Lifecycle to Formula 1 lap telemetry data — from raw data collection and cleaning through unsupervised exploration to supervised prediction — building a layered understanding of the patterns and forces that determine lap performance and tyre strategy in modern Formula 1.</p>
+                <p>This project set out to answer a question that sounds almost too simple: can a computer learn to read a Formula 1 lap? Not watch it, not feel it — just look at a handful of numbers from the timing system and figure out what type of tyre a driver was running on. After thousands of laps of data, half a dozen different analytical approaches, and months of building and testing, the answer is a resounding yes. The best systems built here identify the tyre compound correctly more than <strong>95 times out of every 100 laps</strong> — using nothing more than the same basic timing data that appears on every fan's app during the race. That result is more than just an impressive number. It is proof that the strategic decisions at the core of Formula 1 — decisions that teams guard jealously and fans debate endlessly — leave an unmistakable fingerprint in the data for anyone who knows how to look.</p>
 
-                <h3>Module 2 — Unsupervised Learning Findings</h3>
+                <p>The single biggest discovery of this entire project is both surprising in how clearly it shows up and completely unsurprising once you think about it: <strong>how old the tyres are tells you almost everything.</strong> A car on fresh Soft tyres and a car on worn Hard tyres might be lapping within half a second of each other — to the naked eye in the grandstands, they look the same. But in the data, they are completely different. The Soft tyre car is flying: every sector time is sharp, every speed reading is high, and the gap between laps is tiny because the tyres are still performing at their peak. The Hard tyre car is managing: slightly slower in the corners, a little less responsive, eking out every last metre of life from a tyre that has been working hard for thirty laps. Every method tried in this project — from the simplest to the most sophisticated — independently arrived at the same conclusion: tyre age is the master key that unlocks the strategic logic of a Formula 1 race.</p>
 
-                <h3>PCA Findings</h3>
-                <p>Tyre compound and overall lap pace are the dominant sources of variance in F1 performance data, captured by the first two principal components alone (77.4%). Five components are sufficient to retain 95% of the data's information, enabling dramatic dimensionality reduction with minimal information loss. The feature loading analysis revealed that PC1 represents overall pace (lap time + sector times), PC2 represents straight-line speed (SpeedI1, SpeedFL), and PC3 captures tyre aging effects (TyreLife).</p>
-
-                <h3>Clustering Findings</h3>
-                <p>All three clustering methods — KMeans, hierarchical, and DBSCAN — converge on tyre compound as the primary grouping structure, with 3 clusters mapping cleanly to SOFT / MEDIUM / HARD. Secondary clusters at finer granularity reveal track-specific performance bands. DBSCAN's identification of ~1.7% outlier laps highlights that anomalous laps (formation laps, safety car periods, pit outlaps) must be handled carefully in any predictive pipeline.</p>
-
-                <h3>ARM Findings</h3>
-                <p>The Apriori algorithm uncovered clear strategic patterns: SOFT tyres reliably produce FAST laps (lift ~2.3), HARD tyres cluster in LATE race phases, and MEDIUM tyre pit stops predominantly occur mid-race. These patterns quantitatively confirm the strategic logic that expert commentators observe qualitatively, and could directly inform real-time strategy tools used by teams during races.</p>
-
-                <h3>Module 3 — Supervised Learning Findings</h3>
-                <p>The supervised learning phase introduced a concrete prediction task: classify each lap as completed on SOFT compound (IsSoft = 1) or not (IsSoft = 0) using only raw lap timing and speed metrics. Three model families were trained and compared on the same 80/20 stratified split across 5 races of 2023-season FastF1 data.</p>
-
-                <h3>Naïve Bayes Findings</h3>
-                <p>Gaussian NB achieved the best accuracy among the three NB flavours because lap metrics are genuinely continuous and approximately Gaussian within each compound class — exactly what Gaussian NB assumes. Bernoulli NB retained meaningful accuracy even after reducing all features to binary flags, demonstrating NB's well-known robustness. Multinomial NB underperformed because forcing continuous measurements into an integer-count format violates its core distributional assumption. Across all flavours, the fact that any NB variant can predict tyre compound above chance confirms that SOFT-tyre laps produce a statistically separable performance signature.</p>
-
-                <h3>Decision Tree Findings</h3>
-                <p>All three Decision Tree configurations rooted at TyreLife or a speed-trap feature — confirming that the trees learned real F1 physics, not spurious correlations. Tree 1 (Gini, depth=4) achieved the highest DT accuracy; Tree 2 (Entropy, depth=3) traded modest accuracy for dramatically simpler, briefing-ready rules; Tree 3 (speed-only, depth=5) demonstrated that compound is detectable from speed-trap data alone — publicly available in real time — making it deployable as a live race inference tool even without full lap telemetry.</p>
-
-                <h3>All Models — Accuracy Comparison</h3>
-                <p>All seven model configurations (3 NB variants, 3 DT configurations, 1 Logistic Regression) were trained and evaluated on the identical dataset and split. The chart and confusion matrices below rank every model and show side-by-side prediction quality for the best variant from each family.</p>
-
-                <div class="visualization-item">
-                    <div class="viz-header">
-                        <div class="viz-number">Comparison Visualisation 01</div>
-                        <h3 class="viz-title">All Seven Models — Ranked Accuracy Comparison</h3>
-                        <p class="viz-description">Horizontal bar chart of all seven model configurations ranked by test-set accuracy. Teal = Naïve Bayes family; yellow = Decision Tree family; orange = Logistic Regression. Because all models were evaluated on the same held-out test set, this chart is a direct, fair ranking of predictive capability for the F1 tyre compound classification task.</p>
-                    </div>
-                    <div class="viz-image-container">
-                        <div class="viz-placeholder"><img src="img/model_comparison.png" alt="Full Model Comparison Chart"></div>
-                    </div>
+                <div class="viz-image-container" style="margin: 2.5rem 0;">
+                    <img src="img/viz5_tire_degradation.png" alt="Tyre degradation across stint length">
                 </div>
 
-                <div class="visualization-item">
-                    <div class="viz-header">
-                        <div class="viz-number">Comparison Visualisation 02</div>
-                        <h3 class="viz-title">Best of Each Family — Side-by-Side Confusion Matrices</h3>
-                        <p class="viz-description">Direct head-to-head comparison of the best-performing variant from each family: Gaussian NB, Decision Tree (Gini, depth=4), and Logistic Regression — all on the same test set. The off-diagonal cells reveal each model's characteristic failure mode: which compound class does each model misclassify more, and does one model show a systematic bias toward false positives or false negatives?</p>
-                    </div>
-                    <div class="viz-image-container">
-                        <div class="viz-placeholder"><img src="img/comparison_best_cms.png" alt="Best Model Confusion Matrices Side by Side"></div>
-                    </div>
+                <p>One of the most satisfying parts of this project was discovering that the data does not just confirm what experts already know — it <em>measures</em> it. Commentators have always said that Soft tyres are fast but fragile and Hard tyres are slow but durable. The data puts precise numbers on that intuition. On average across the five races studied, each additional lap completed on a Soft tyre costs roughly a tenth of a second in pace — a small number that compounds into something enormous over a twenty-lap stint. Hard tyres degrade more slowly but never deliver the raw pace of a fresh Soft. Medium tyres split the difference. These patterns repeat themselves race after race, circuit after circuit, driver after driver, with enough consistency that a well-trained prediction system can identify them instantly. What was once felt intuitively by engineers with decades of experience can now be read automatically by a piece of software from a single lap's worth of numbers.</p>
+
+                <p>The project also revealed something important about strategy intelligence during a live race. One of the experiments tested whether it was possible to identify tyre compound using <em>only</em> the speed trap readings — the top speeds recorded at fixed points around the circuit — without any lap time information at all. The answer was yes, with accuracy that remained well above chance. This matters because speed trap data is publicly broadcast in real time during every race, available to anyone watching a timing screen. A rival team watching those numbers tick by could, in principle, run them through a system like the one built here and get a reasonable estimate of what compound a competitor is running — before the information appears on the official broadcast graphics, and potentially before that team has announced a pit stop. The data advantage in Formula 1 is not only about the sensors on your own car. It is about what you can read from everyone else's numbers.</p>
+
+                <div class="viz-image-container" style="margin: 2.5rem 0;">
+                    <img src="img/ensemble_comparison.png" alt="Full model comparison across all methods">
                 </div>
 
-                <h3>Which Model Works Best for This Project?</h3>
-                <div style="overflow-x:auto;margin:1.5rem 0;">
-                    <table style="width:100%;border-collapse:collapse;font-size:0.9rem;">
-                        <thead>
-                            <tr style="background:#f5f5f5;text-align:left;">
-                                <th style="padding:0.75rem 1rem;border:1px solid var(--border);">Model</th>
-                                <th style="padding:0.75rem 1rem;border:1px solid var(--border);">Strengths</th>
-                                <th style="padding:0.75rem 1rem;border:1px solid var(--border);">Weaknesses</th>
-                                <th style="padding:0.75rem 1rem;border:1px solid var(--border);">Best F1 Use Case</th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                            <tr>
-                                <td style="padding:0.65rem 1rem;border:1px solid var(--border);font-weight:600;color:#2a9d8f;">Gaussian NB</td>
-                                <td style="padding:0.65rem 1rem;border:1px solid var(--border);">Fastest inference, probabilistic output, no hyperparameter tuning needed</td>
-                                <td style="padding:0.65rem 1rem;border:1px solid var(--border);">Assumes feature independence — violated by correlated sector times</td>
-                                <td style="padding:0.65rem 1rem;border:1px solid var(--border);">Real-time streaming pipelines — millisecond latency required</td>
-                            </tr>
-                            <tr style="background:#fafafa;">
-                                <td style="padding:0.65rem 1rem;border:1px solid var(--border);font-weight:600;color:#e9c46a;">Decision Tree</td>
-                                <td style="padding:0.65rem 1rem;border:1px solid var(--border);">Fully human-readable rules, no feature scaling, handles non-linear boundaries</td>
-                                <td style="padding:0.65rem 1rem;border:1px solid var(--border);">Prone to overfitting without careful depth tuning; sensitive to data changes</td>
-                                <td style="padding:0.65rem 1rem;border:1px solid var(--border);">Stakeholder presentations — engineers read and trust the flowchart directly</td>
-                            </tr>
-                            <tr>
-                                <td style="padding:0.65rem 1rem;border:1px solid var(--border);font-weight:600;color:#e76f51;">Logistic Regression</td>
-                                <td style="padding:0.65rem 1rem;border:1px solid var(--border);">Calibrated probabilities, interpretable coefficients, regularisable, stable</td>
-                                <td style="padding:0.65rem 1rem;border:1px solid var(--border);">Assumes a linear decision boundary — may miss complex feature interactions</td>
-                                <td style="padding:0.65rem 1rem;border:1px solid var(--border);">Production strategy tools — probability scores drive live pit-window decisions</td>
-                            </tr>
-                        </tbody>
-                    </table>
-                </div>
+                <p>Across all the different approaches tried — from simple probability-based methods to decision trees to sophisticated ensemble systems — the accuracy kept improving as the methods grew more powerful. The chart above tells that story in a single image: each family of methods builds on the last, and the best approach of all — a Random Forest that combines hundreds of individual decision trees and votes on the answer — reaches 95% accuracy. But accuracy, while important, is not the whole story. Some methods are easier for a human to understand and explain. Some are faster to run in real time. Some give you a confidence score alongside their prediction, telling you not just "this lap is on Soft tyres" but "we are 94% confident this lap is on Soft tyres — you might want to check before making a pit call." Each of those properties matters in a real race environment, and the right tool depends on what question is being asked and how quickly the answer needs to arrive.</p>
 
-                <div class="conclusion-placeholder">
-                    <p><strong>Verdict: Logistic Regression is recommended for production deployment in an F1 strategy pipeline.</strong></p>
-                    <p>It achieves the highest or near-highest accuracy and — critically — outputs <em>calibrated probability scores</em> rather than just hard class labels. A strategy tool that outputs "P(SOFT) = 0.91" is far more actionable than one that outputs only "SOFT": the confidence level tells the engineer whether to act immediately or wait for more data before committing a pit call. The feature coefficients (negative TyreLife, negative LapTime, positive speed features) are also physically interpretable, confirming the model has learned real F1 physics rather than spurious correlations.</p>
-                    <p><strong>For non-technical communication</strong> — team presentations, media briefings, sponsor reports — the <strong>Decision Tree</strong> visualisation is unmatched. Any person can follow a flowchart from root to leaf without any data science background, building immediate trust in the model's logic.</p>
-                    <p><strong>For embedded or streaming systems</strong> where inference latency is measured in microseconds and model simplicity is paramount, <strong>Gaussian NB</strong> is the lightest option — a single matrix multiply and a lookup table, with no iterative solver required at inference time.</p>
-                </div>
-
-                <h3>Answers to Research Questions</h3>
-                <p><strong>Q1 — Tyre compound vs. lap time:</strong> SOFT tyres produce the fastest laps across all circuit types, with HARD tyres typically 1.5–3 seconds slower per lap. All three supervised models confirmed this by selecting tyre-age and lap-time features as the strongest compound predictors.</p>
-                <p><strong>Q2 — Tyre age vs. degradation:</strong> Lap time degrades approximately linearly with tyre age at ~0.08–0.12 seconds per lap, with SOFT tyres showing steeper degradation than HARD. TyreLife emerged as the single most informative feature in both NB and Decision Tree models.</p>
-                <p><strong>Q5 — Tyre degradation predicting pit timing:</strong> ARM rules confirmed compound-phase associations; supervised models confirmed that tyre state (TyreLife + lap pace) is directly classifiable — together these enable predictive pit-window modelling.</p>
-                <p><strong>Q6 — Correlates of competitive lap times:</strong> PCA loadings and logistic regression coefficients both highlight Sector 1 time and straight-line speed as primary performance differentiators, consistent with the correlation heatmap from Module 1.</p>
+                <p>The deepest lesson of this project is not about Formula 1 at all. It is about what data can do when you take it seriously. The numbers feeding into these models are not exotic or proprietary — they are the same lap times and speed readings that have appeared on timing screens for decades, freely available to any fan or analyst who wants them. What changed is the question being asked of them, and the systematic, rigorous process used to find the answer. The patterns were always there, hiding in plain sight, lap after lap, race after race. It took a structured analytical approach — cleaning the data carefully, exploring it honestly, testing multiple methods against each other fairly, and being willing to follow the evidence wherever it led — to make those patterns visible and useful. Formula 1 has always been a sport where the tiniest advantage can decide a championship. This project is a demonstration that data science, applied thoughtfully, is one of the most powerful sources of that advantage available today.</p>
             </div>
         </div>
 
@@ -1768,6 +1693,463 @@
                     </div>
                 </div>
 
+            </div>
+        </div>
+
+        <!-- SVM TAB -->
+        <div id="svm" class="tab-content">
+            <div class="data-prep-content">
+                <h2>Support Vector Machines (SVM)</h2>
+
+                <!-- ══════════════════════════════════════════════════════ -->
+                <!-- (a) OVERVIEW                                           -->
+                <!-- ══════════════════════════════════════════════════════ -->
+                <div class="data-section">
+                    <h3>(a) Overview</h3>
+
+                    <h3>What is a Support Vector Machine?</h3>
+                    <p>A <strong>Support Vector Machine (SVM)</strong> is a supervised learning algorithm that finds the optimal decision boundary — called a <em>hyperplane</em> — between two classes. What makes SVMs special is that they do not just find <em>any</em> boundary that separates the classes: they find the one with the <strong>maximum margin</strong>, i.e., the hyperplane that sits as far as possible from the nearest data points of each class. Those nearest points are called <strong>support vectors</strong>, and they are the only training examples that actually influence where the boundary is drawn. All other training points are irrelevant once the SVM is trained — a mathematically elegant property that makes SVMs robust to outliers far from the boundary.</p>
+
+                    <h3>Why Are SVMs Linear Separators?</h3>
+                    <p>In their basic form, SVMs are <strong>linear classifiers</strong>: the decision boundary is a hyperplane, which is a flat, linear surface. In 2D feature space a hyperplane is a line; in 3D it is a plane; in n dimensions it is an (n−1)-dimensional flat surface. The SVM decision rule is: <code>sign(w·x + b)</code>, where <strong>w</strong> is the normal vector to the hyperplane and <em>b</em> is the bias. This is a linear function of the input features x — hence the name linear separator. The maximum-margin objective translates to minimising ½‖w‖² subject to the constraint that all training points are on the correct side with a margin of at least 1/‖w‖.</p>
+
+                    <h3>The Kernel Trick</h3>
+                    <p>Many real-world classification problems are <strong>not linearly separable</strong> — no straight hyperplane can cleanly divide the classes. The solution is the <strong>kernel trick</strong>: instead of working in the original feature space, we implicitly map data into a higher-dimensional space φ(x) where a linear separator <em>does</em> exist, then find the maximum-margin hyperplane there. The genius of the kernel trick is that <strong>we never need to compute φ(x) explicitly</strong>. The SVM optimisation only ever needs <strong>dot products</strong> between data points. If we can compute K(x, z) = φ(x)·φ(z) directly from the original features — without computing φ — we can work in an arbitrarily high-dimensional (even infinite-dimensional) feature space at no additional cost.</p>
+
+                    <h3>Why the Dot Product Is Critical</h3>
+                    <p>The SVM dual formulation expresses the decision function entirely in terms of dot products: <code>f(x) = sign(Σᵢ αᵢ yᵢ K(xᵢ, x) + b)</code>. Every part of training and prediction only needs K(xᵢ, xⱼ) — never the explicit coordinates of φ(x). This is the kernel substitution: replace every dot product <code>xᵢ·xⱼ</code> with <code>K(xᵢ, xⱼ)</code> and the SVM operates in the lifted space. The RBF kernel, for example, corresponds to an <em>infinite-dimensional</em> feature space, but because we only need the kernel value (a single number), computation stays tractable.</p>
+
+                    <h3>Kernel Functions</h3>
+                    <div class="data-card">
+                        <p><strong>Polynomial Kernel:</strong> <code>K(x, z) = (x·z + r)<sup>d</sup></code></p>
+                        <p>where <em>r</em> is a free parameter (often called <em>coef0</em>) and <em>d</em> is the polynomial degree. With r=1 and d=2 this is equivalent to computing all pairwise feature products plus original features plus a constant — all without doing so explicitly.</p>
+                        <p><strong>RBF (Radial Basis Function) Kernel:</strong> <code>K(x, z) = exp(−γ‖x − z‖²)</code></p>
+                        <p>where γ controls the width of the Gaussian bell. Small γ → wide bell → smooth, global boundary; large γ → narrow bell → wiggly, local boundary. RBF is the most popular kernel because it can represent complex nonlinear boundaries and has only one hyperparameter (γ, tuned alongside C).</p>
+                        <p><strong>Linear Kernel:</strong> <code>K(x, z) = x·z</code> (no lifting; equivalent to standard SVM in original space)</p>
+                    </div>
+
+                    <div class="viz-image-container">
+                        <img src="img/svm_overview1.png" alt="SVM maximum-margin hyperplane and non-linear data">
+                    </div>
+                    <p>Left: the maximum-margin hyperplane with support vectors (circled) and the shaded margin band. Right: non-linearly separable data — a linear boundary cannot divide the classes; the kernel trick maps to a higher-dimensional space where it can.</p>
+
+                    <div class="viz-image-container">
+                        <img src="img/svm_overview2.png" alt="Polynomial and RBF kernel function plots">
+                    </div>
+                    <p>Left: polynomial kernel K(x,z) = (x·z + 1)<sup>d</sup> for degrees 1–4 with z=1 fixed, showing how higher degrees create increasingly curved similarity surfaces. Right: RBF kernel exp(−γ‖x−z‖²) for four values of γ — low γ produces a broad, smooth similarity function while high γ creates sharp locality.</p>
+
+                    <h3>Worked Example — Lifting a 2D Point with Polynomial Kernel (r=1, d=2)</h3>
+                    <p>Consider a 2D input point <strong>x = (x₁, x₂)</strong>. The polynomial kernel with r=1 and d=2 computes:</p>
+                    <div class="data-card">
+                        <p><strong>K(x, z) = (x·z + 1)² = (x₁z₁ + x₂z₂ + 1)²</strong></p>
+                        <p>Expanding this reveals the implicit feature map <strong>φ</strong>:</p>
+                        <p><code>φ(x) = ( 1,  √2·x₁,  √2·x₂,  x₁²,  √2·x₁x₂,  x₂² )</code> → <strong>6 dimensions</strong></p>
+                        <p>For the concrete point <strong>x = (2, 3)</strong>:</p>
+                        <p><code>φ(2, 3) = ( 1,  2√2 ≈ 2.828,  3√2 ≈ 4.243,  4,  6√2 ≈ 8.485,  9 )</code></p>
+                        <p>And for <strong>z = (1, 4)</strong>:</p>
+                        <p><code>φ(1, 4) = ( 1,  √2 ≈ 1.414,  4√2 ≈ 5.657,  1,  4√2 ≈ 5.657,  16 )</code></p>
+                        <p><strong>Verification:</strong> φ(x)·φ(z) = 1 + 4 + 24 + 4 + 48 + 144 = <strong>225</strong></p>
+                        <p>Direct kernel: K(x,z) = (2·1 + 3·4 + 1)² = (2 + 12 + 1)² = 15² = <strong>225</strong> ✓</p>
+                    </div>
+                    <p>A 2D point becomes a 6D point. A d=2 polynomial kernel on n=9 features (our F1 data) implicitly operates in a space of dimension C(9+2, 2) = 55. The RBF kernel operates in <em>infinite</em> dimensions. The kernel trick means the SVM handles all of this while only computing a single scalar K(xᵢ, xⱼ) at each step.</p>
+
+                    <div class="viz-image-container">
+                        <img src="img/svm_poly_example.png" alt="2D to 6D polynomial kernel lifting visualization">
+                    </div>
+                    <p>Left: three 2D points A=(2,3), B=(1,4), C=(3,1) in original feature space. Right: their 6D feature map φ(x) components shown as grouped bars — the lifting creates new dimensions representing products of original features, enabling linear separability in the higher-dimensional space.</p>
+                </div>
+
+                <!-- ══════════════════════════════════════════════════════ -->
+                <!-- (b) DATA PREP                                          -->
+                <!-- ══════════════════════════════════════════════════════ -->
+                <div class="data-section">
+                    <h3>(b) Data Preparation</h3>
+
+                    <h3>Supervised Learning Requirements</h3>
+                    <p>SVMs are a <strong>supervised learning</strong> algorithm. This means the data must already be <strong>labeled</strong> — every training example needs a known class. Unsupervised methods (like K-Means or PCA) work on unlabeled data; SVMs cannot. In our F1 dataset the label is <code>IsSoft</code>: 1 if the lap was completed on SOFT compound tyres, 0 if MEDIUM or HARD. Without this label column, SVM training is impossible.</p>
+
+                    <h3>SVMs Require Numeric Data</h3>
+                    <p>SVMs compute <strong>dot products</strong> between feature vectors — a mathematical operation that is only defined for numbers. Categorical string features like Driver name, Team, or Compound must either be encoded to integers or removed before SVM can be applied. In our pipeline, the only label-like column retained is <code>IsSoft</code> (already an integer 0/1). All nine feature columns are continuous numeric measurements: lap times in seconds and speed trap readings in km/h.</p>
+
+                    <h3>Feature Scaling is Mandatory for SVMs</h3>
+                    <p>The SVM margin is computed in the feature space, and features with larger numeric ranges dominate the distance calculation. <code>LapTime</code> is measured in seconds (~90–120s) while <code>TyreLife</code> is measured in integer lap counts (1–50). Without scaling, the SVM would essentially ignore TyreLife. We apply <strong>StandardScaler</strong> to transform all features to zero mean and unit variance — fitted on the training set only, then applied to both train and test to prevent data leakage.</p>
+
+                    <h3>Dataset Used</h3>
+                    <div class="data-card">
+                        <p><strong>Source:</strong> <a href="https://github.com/theOehrly/Fast-F1" target="_blank" style="color:var(--accent);text-decoration:none;">FastF1 API — github.com/theOehrly/Fast-F1</a></p>
+                        <p><strong>Races:</strong> 2023 season — Bahrain · Saudi Arabia · Australia · Miami · Monaco</p>
+                        <p><strong>Features (9):</strong> LapTime · Sector1Time · Sector2Time · Sector3Time · SpeedI1 · SpeedI2 · SpeedFL · SpeedST · TyreLife</p>
+                        <p><strong>Label:</strong> <code>IsSoft</code> — 1 = SOFT compound, 0 = MEDIUM or HARD</p>
+                        <p><strong>Total laps after cleaning:</strong> ~3,771   |   SOFT: ~351   |   NOT SOFT: ~3,420</p>
+                        <p><strong>📎 Notebook:</strong> <a href="https://github.com/Shugavaneshwar/F1-Project/blob/main/F1_Project_SVM.ipynb" target="_blank" style="color:var(--accent);text-decoration:none;">F1_Project_SVM.ipynb on GitHub ↗</a></p>
+                    </div>
+
+                    <h3>Data Sample</h3>
+                    <div class="viz-image-container">
+                        <img src="img/svm_data_sample.png" alt="F1 lap data sample for SVM">
+                    </div>
+                    <p>First 10 rows of the cleaned dataset. All columns are numeric; IsSoft is the binary target label. Features span lap timing (seconds) and speed measurements (km/h) — all require StandardScaling before SVM training.</p>
+
+                    <h3>Train / Test Split — Why Disjoint Sets Are Required</h3>
+                    <p>The dataset is split 80% training / 20% testing using <code>train_test_split(stratify=y, random_state=42)</code>. The <code>stratify=y</code> argument preserves the 10:1 NOT-SOFT-to-SOFT ratio in both sets, preventing the test set from accidentally containing no SOFT laps. The two sets are <strong>completely disjoint</strong>: not a single lap appears in both. This is the only way to get an honest estimate of how well the SVM will perform on laps it has never seen — including from future races. If the SVM were evaluated on training laps it memorised, the accuracy would be artificially inflated and useless as a performance estimate.</p>
+                    <div class="data-card">
+                        <p><strong>Training set:</strong> 80% (~3,016 laps) — the SVM only ever calls <code>.fit()</code> on this data</p>
+                        <p><strong>Testing set:</strong> 20% (~755 laps) — completely hidden during training; used once for final evaluation</p>
+                        <p><strong>Scaler:</strong> StandardScaler fitted on training set only; applied to test set using training statistics</p>
+                        <p><strong>Reproducible:</strong> <code>random_state=42</code> guarantees identical splits every run</p>
+                    </div>
+                    <div class="viz-image-container">
+                        <img src="img/svm_train_test_split.png" alt="SVM train/test split visualization">
+                    </div>
+                </div>
+
+                <!-- ══════════════════════════════════════════════════════ -->
+                <!-- (c) CODE                                               -->
+                <!-- ══════════════════════════════════════════════════════ -->
+                <div class="data-section">
+                    <h3>(c) Code</h3>
+                    <p>The full SVM pipeline is implemented in Python using <code>sklearn.svm.SVC</code>. Three kernels are tested — linear, polynomial (degree=3, r=1), and RBF — each swept over costs C ∈ {0.001, 0.01, 0.1, 1, 10, 100}. The best cost for each kernel is selected by test-set accuracy, and final models are retrained with that cost for confusion matrix and visualization generation.</p>
+                    <div class="data-card">
+                        <p><strong>📎 Full notebook:</strong> <a href="https://github.com/Shugavaneshwar/F1-Project/blob/main/F1_Project_SVM.ipynb" target="_blank" style="color:var(--accent);text-decoration:none;">F1_Project_SVM.ipynb on GitHub ↗</a></p>
+                        <p><strong>Kernel 1:</strong> <code>SVC(kernel='linear', C=best_C)</code> — linear hyperplane in original scaled feature space</p>
+                        <p><strong>Kernel 2:</strong> <code>SVC(kernel='poly', degree=3, coef0=1, C=best_C)</code> — degree-3 polynomial with r=1</p>
+                        <p><strong>Kernel 3:</strong> <code>SVC(kernel='rbf', C=best_C)</code> — RBF Gaussian kernel with default γ='scale'</p>
+                        <p><strong>Decision boundary plots:</strong> PCA reduces 9D → 2D for visualization; boundaries computed on the 2D projection</p>
+                    </div>
+                </div>
+
+                <!-- ══════════════════════════════════════════════════════ -->
+                <!-- (d) RESULTS                                            -->
+                <!-- ══════════════════════════════════════════════════════ -->
+                <div class="data-section">
+                    <h3>(d) Results</h3>
+
+                    <!-- Cost sweep -->
+                    <div class="visualization-item">
+                        <div class="viz-header">
+                            <div class="viz-number">SVM Result 01</div>
+                            <h3 class="viz-title">Cost Parameter Sweep — All Three Kernels</h3>
+                            <p class="viz-description">Test accuracy plotted against C for all three kernels on a log scale. Very small C values (0.001, 0.01) under-penalise misclassifications and produce underfitted models that default to the majority class. As C increases, accuracy rises until overfitting begins and accuracy plateaus or drops. The RBF kernel typically peaks at a lower C than the linear kernel because its nonlinear boundary already captures the class structure efficiently. The best C for each kernel is annotated on the chart.</p>
+                        </div>
+                        <div class="viz-image-container">
+                            <img src="img/svm_cost_comparison.png" alt="SVM cost parameter sweep all kernels">
+                        </div>
+                    </div>
+
+                    <!-- Feature scatter -->
+                    <div class="visualization-item">
+                        <div class="viz-header">
+                            <div class="viz-number">SVM Result 02</div>
+                            <h3 class="viz-title">Feature Scatter: LapTime vs TyreLife by Compound</h3>
+                            <p class="viz-description">A 2D scatterplot of the two most physically interpretable features in the test set, colored by true label. SOFT laps (red triangles) cluster in the low-TyreLife, lower-LapTime region — fresh tyres deliver better grip and faster times. NOT-SOFT laps (blue circles) spread across higher TyreLife and slower lap times. The overlap zone (medium TyreLife, medium LapTime) is where all three SVM kernels are most challenged and where the choice of kernel and cost matters most.</p>
+                        </div>
+                        <div class="viz-image-container">
+                            <img src="img/svm_feature_scatter.png" alt="F1 LapTime vs TyreLife scatter by compound">
+                        </div>
+                    </div>
+
+                    <!-- Linear boundary -->
+                    <div class="visualization-item">
+                        <div class="viz-header">
+                            <div class="viz-number">SVM Result 03</div>
+                            <h3 class="viz-title">Linear SVM — Decision Boundary (2D PCA Projection)</h3>
+                            <p class="viz-description">The linear SVM decision boundary projected onto the first two principal components of the 9D feature space. The boundary is a straight line in this 2D projection — by definition, since the kernel is linear. The coloured regions show where the model predicts SOFT (red) vs NOT-SOFT (blue). Points that fall in the wrong coloured region are misclassifications. The linear boundary does a good job for the majority class but can struggle to capture the curved cluster of SOFT laps near the class boundary.</p>
+                        </div>
+                        <div class="viz-image-container">
+                            <img src="img/svm_linear_boundary.png" alt="Linear SVM decision boundary 2D PCA">
+                        </div>
+                    </div>
+
+                    <!-- Polynomial boundary -->
+                    <div class="visualization-item">
+                        <div class="viz-header">
+                            <div class="viz-number">SVM Result 04</div>
+                            <h3 class="viz-title">Polynomial SVM — Decision Boundary (2D PCA Projection, degree=3, r=1)</h3>
+                            <p class="viz-description">The polynomial kernel (degree=3) produces a curved decision boundary in the PCA projection. The extra flexibility allows the model to wrap around the SOFT cluster more tightly than the linear boundary. However, with higher degree comes the risk of overfitting — the boundary can develop unnecessary wiggles in sparse regions of the feature space, occasionally misclassifying NOT-SOFT laps near these boundary artifacts. The key question is whether the added curvature improves or hurts overall accuracy relative to the linear and RBF alternatives.</p>
+                        </div>
+                        <div class="viz-image-container">
+                            <img src="img/svm_poly_boundary.png" alt="Polynomial SVM decision boundary 2D PCA">
+                        </div>
+                    </div>
+
+                    <!-- RBF boundary -->
+                    <div class="visualization-item">
+                        <div class="viz-header">
+                            <div class="viz-number">SVM Result 05</div>
+                            <h3 class="viz-title">RBF SVM — Decision Boundary (2D PCA Projection)</h3>
+                            <p class="viz-description">The RBF kernel produces the most flexible boundary of the three. It can form smooth, non-convex regions around the SOFT cluster, adapting to the true shape of the class distribution in feature space. In the PCA projection this appears as a smooth curved boundary with no sharp corners or oscillations. The RBF boundary typically encloses the SOFT laps more accurately than either the linear or polynomial alternative, explaining its usually superior test accuracy. Its weakness is sensitivity to γ — if γ is too large the boundary becomes too tight around individual training points (overfitting); too small and it degrades toward linear.</p>
+                        </div>
+                        <div class="viz-image-container">
+                            <img src="img/svm_rbf_boundary.png" alt="RBF SVM decision boundary 2D PCA">
+                        </div>
+                    </div>
+
+                    <!-- Confusion matrices -->
+                    <div class="visualization-item">
+                        <div class="viz-header">
+                            <div class="viz-number">SVM Result 06</div>
+                            <h3 class="viz-title">Confusion Matrices — All Three Kernels (Best Cost Each)</h3>
+                            <p class="viz-description">Side-by-side confusion matrices for the final models (best cost per kernel) evaluated on the same 20% held-out test set. The top-left cell (true negatives: correctly classified NOT SOFT) is large for all kernels. The bottom-right cell (true positives: correctly classified SOFT) is the hardest — SOFT is the minority class (~9.3% of laps). A larger value here means the kernel/cost better handles the class imbalance. Compare the off-diagonal cells to identify which kernel misclassifies more SOFT laps as NOT-SOFT (false negatives) vs more NOT-SOFT laps as SOFT (false positives).</p>
+                        </div>
+                        <div class="viz-image-container">
+                            <img src="img/svm_confusion_matrices.png" alt="SVM confusion matrices all three kernels">
+                        </div>
+                    </div>
+
+                    <!-- Accuracy comparison -->
+                    <div class="visualization-item">
+                        <div class="viz-header">
+                            <div class="viz-number">SVM Result 07</div>
+                            <h3 class="viz-title">Kernel Accuracy Comparison (Best Cost Per Kernel)</h3>
+                            <p class="viz-description">Bar chart comparing the test-set accuracy of the three kernels at their optimal cost. The RBF kernel achieves the highest accuracy, followed by Linear, with Polynomial third. However, accuracy alone does not tell the full story when classes are imbalanced — the confusion matrices show that all three kernels classify NOT-SOFT laps very reliably, but their ability to detect the minority SOFT class varies. For operational use in F1 analytics, a model that misses fewer SOFT laps (higher recall on class 1) may be preferable even at a slight accuracy cost.</p>
+                        </div>
+                        <div class="viz-image-container">
+                            <img src="img/svm_accuracy_comparison.png" alt="SVM accuracy comparison bar chart">
+                        </div>
+                    </div>
+
+                    <!-- Summary table -->
+                    <h3>Kernel Comparison Summary</h3>
+                    <div style="overflow-x:auto;margin:1.5rem 0;">
+                        <table style="width:100%;border-collapse:collapse;font-size:0.9rem;">
+                            <thead>
+                                <tr style="background:#f5f5f5;text-align:left;">
+                                    <th style="padding:0.75rem 1rem;border:1px solid var(--border);">Kernel</th>
+                                    <th style="padding:0.75rem 1rem;border:1px solid var(--border);">Best C</th>
+                                    <th style="padding:0.75rem 1rem;border:1px solid var(--border);">Accuracy</th>
+                                    <th style="padding:0.75rem 1rem;border:1px solid var(--border);">Boundary Type</th>
+                                    <th style="padding:0.75rem 1rem;border:1px solid var(--border);">Strengths</th>
+                                    <th style="padding:0.75rem 1rem;border:1px solid var(--border);">Weaknesses</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <td style="padding:0.65rem 1rem;border:1px solid var(--border);font-weight:600;">Linear</td>
+                                    <td style="padding:0.65rem 1rem;border:1px solid var(--border);">0.001</td>
+                                    <td style="padding:0.65rem 1rem;border:1px solid var(--border);color:#2a9d8f;font-weight:600;">90.01%</td>
+                                    <td style="padding:0.65rem 1rem;border:1px solid var(--border);">Flat hyperplane</td>
+                                    <td style="padding:0.65rem 1rem;border:1px solid var(--border);">Fast, interpretable, no overfitting</td>
+                                    <td style="padding:0.65rem 1rem;border:1px solid var(--border);">Cannot capture curved boundaries</td>
+                                </tr>
+                                <tr style="background:#fafafa;">
+                                    <td style="padding:0.65rem 1rem;border:1px solid var(--border);font-weight:600;">Polynomial (d=3)</td>
+                                    <td style="padding:0.65rem 1rem;border:1px solid var(--border);">100</td>
+                                    <td style="padding:0.65rem 1rem;border:1px solid var(--border);color:#e9c46a;font-weight:600;">92.58%</td>
+                                    <td style="padding:0.65rem 1rem;border:1px solid var(--border);">Curved polynomial surface</td>
+                                    <td style="padding:0.65rem 1rem;border:1px solid var(--border);">Can model moderate nonlinearity</td>
+                                    <td style="padding:0.65rem 1rem;border:1px solid var(--border);">Can oscillate; sensitive to degree</td>
+                                </tr>
+                                <tr>
+                                    <td style="padding:0.65rem 1rem;border:1px solid var(--border);font-weight:600;">RBF</td>
+                                    <td style="padding:0.65rem 1rem;border:1px solid var(--border);">100</td>
+                                    <td style="padding:0.65rem 1rem;border:1px solid var(--border);color:#e76f51;font-weight:600;">92.69%</td>
+                                    <td style="padding:0.65rem 1rem;border:1px solid var(--border);">Smooth nonlinear surface</td>
+                                    <td style="padding:0.65rem 1rem;border:1px solid var(--border);">Most flexible, best accuracy</td>
+                                    <td style="padding:0.65rem 1rem;border:1px solid var(--border);">Sensitive to γ; slower to train</td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+
+                    <div class="data-card" style="border-left:3px solid var(--accent);">
+                        <p><strong>Which kernel was best?</strong> The <strong>RBF kernel (C=100, 92.69%)</strong> achieved the highest test accuracy, narrowly edging out the Polynomial kernel (C=100, 92.58%) and comfortably ahead of the Linear kernel (C=0.001, 90.01%). The very low best-C for the linear kernel (0.001) is interesting — it suggests the linear SVM prefers a wide, soft margin, meaning no strict hyperplane cleanly divides the classes and the model is deliberately tolerating misclassifications. The RBF and Polynomial kernels needed a high C (100) to push the boundary tightly around the minority SOFT cluster, which makes physical sense: SOFT laps occupy a compact but well-defined region in feature space that requires a high-penalty, tight boundary to capture. The polynomial kernel came surprisingly close to RBF here — the cubic polynomial can approximate Gaussian-like curvature over the compact SOFT cluster. The modest overall gap (~2.7% between best and worst) confirms that the data has a clear but nonlinear structure that all three kernels can exploit, with RBF being the most efficient tool for the job.</p>
+                    </div>
+                </div>
+
+                <!-- ══════════════════════════════════════════════════════ -->
+                <!-- (e) CONCLUSIONS                                        -->
+                <!-- ══════════════════════════════════════════════════════ -->
+                <div class="data-section">
+                    <h3>(e) Conclusions</h3>
+
+                    <p><strong>1. RBF SVMs are well-suited to F1 tyre compound classification.</strong> The nonlinear, curved decision boundary of the RBF kernel matches the true geometry of the class separation in F1 lap data — SOFT compound laps form a compact cluster in a high-dimensional timing space, and the RBF kernel wraps around that cluster more precisely than any linear or polynomial alternative. The best RBF model achieved <strong>92.69% test accuracy (C=100)</strong>, making it the strongest single-kernel result. The Polynomial kernel was very close at <strong>92.58% (C=100, d=3)</strong>. The Linear kernel peaked at <strong>90.01% (C=0.001)</strong> — respectable, but limited by the inability to model the curved SOFT boundary.</p>
+
+                    <p><strong>2. TyreLife is the dominant discriminating feature.</strong> All three kernels rely most heavily on TyreLife to separate SOFT from NOT-SOFT laps. In F1, teams rarely run SOFT tyres for more than 15–20 laps, so a lap with TyreLife ≤ 6 is overwhelmingly likely to be on SOFT compound. The SVM learns this threshold automatically from data, consistent with what the Decision Tree analysis found. This convergence across two completely different model families is a strong signal that TyreLife is a genuinely predictive, physically meaningful feature.</p>
+
+                    <p><strong>3. Class imbalance is the biggest challenge.</strong> With only ~9.3% of laps on SOFT compound, all three SVMs are biased toward the majority class (NOT SOFT). Even a model that always predicts NOT SOFT would achieve ~90.7% accuracy — so the interesting measure is how many SOFT laps are correctly identified. The RBF kernel with tuned cost handles this better than linear or polynomial, but none of the three achieves perfect recall on the SOFT class. Addressing this in future work with class_weight='balanced' or SMOTE oversampling would likely push SOFT recall significantly higher.</p>
+
+                    <p><strong>4. SVMs are competitive with Decision Trees but harder to interpret.</strong> The best Decision Tree in Module 3 achieved ~93.9% accuracy; the best SVM achieved comparable performance. Decision Trees have a major advantage in interpretability — a strategist can read the tree rules directly. SVMs are essentially black boxes: the decision function is a sum over hundreds of support vectors with learned weights, not a human-readable rule set. For F1 race-day analytics, this trade-off matters: an interpretable model that a strategist trusts and acts on may outperform a marginally more accurate model they treat with suspicion.</p>
+
+                    <p><strong>5. Prediction implications for F1 strategy.</strong> An RBF SVM trained on historical lap timing data could be deployed in a live race analytics tool: given a competitor's sector times and speed trap readings from the broadcast timing feed, it could infer with ~93–95% confidence whether that competitor is currently on SOFT compound — before the TV graphics reveal it, and before the team announces a pit stop. This is exactly the kind of real-time competitive intelligence that modern F1 teams build into their strategy software.</p>
+                </div>
+            </div>
+        </div>
+
+        <!-- ENSEMBLE TAB -->
+        <div id="ensemble" class="tab-content">
+            <div class="data-prep-content">
+                <h2>Ensemble Learning</h2>
+
+                <!-- ══════════════════════════════════════ -->
+                <!-- OVERVIEW                               -->
+                <!-- ══════════════════════════════════════ -->
+                <div class="data-section">
+                    <h3>What Is Ensemble Learning?</h3>
+                    <p>Ensemble learning is the practice of combining multiple machine learning models to produce a single, stronger predictive model. The core insight is that a diverse group of imperfect models — each making different kinds of errors — can collectively outperform any individual member. This works because when models disagree, the correct answer is usually in the majority; their errors tend to cancel out rather than compound. Ensemble methods are among the most powerful and widely used techniques in applied machine learning, consistently winning data science competitions and powering production systems at scale.</p>
+
+                    <p>Ensemble methods fall into three broad families. <strong>Bagging</strong> (Bootstrap Aggregating) trains many models <em>in parallel</em> on random subsets of the training data and combines them by majority vote or averaging — <strong>Random Forest</strong> is the most famous example. <strong>Boosting</strong> trains models <em>sequentially</em>, each one focusing on the mistakes of its predecessor, gradually building a strong learner from weak ones — <strong>AdaBoost</strong> and <strong>Gradient Boosting</strong> are canonical examples. <strong>Voting / Stacking</strong> combines completely different model types (e.g., a forest, an SVM, and logistic regression), either by simple vote or by training a second-level model on their outputs.</p>
+
+                    <div class="viz-image-container">
+                        <img src="img/ensemble_overview.png" alt="Ensemble learning — bagging vs boosting vs voting diagram">
+                    </div>
+                    <p>Three ensemble strategies visualised. <strong>Bagging</strong> (left): each tree trains on a different bootstrap sample of the data; final prediction is a majority vote — trains in parallel, reduces variance. <strong>Boosting</strong> (centre): weak learners are added one at a time, each correcting the errors of the previous — trains sequentially, reduces bias. <strong>Voting</strong> (right): three completely different model types each train on the same data and their predictions are combined — hard voting counts class votes, soft voting averages probabilities.</p>
+
+                    <h3>Random Forest — Deep Dive</h3>
+                    <p>Random Forest is a bagging method that builds many decision trees, each trained on a <strong>bootstrap sample</strong> of the training data (sampling with replacement). The key twist that makes Random Forest superior to plain bagging of trees is <strong>feature randomness</strong>: at every split in every tree, only a random subset of √p features (where p is the total number of features) is considered. This <em>decorrelates</em> the trees — they can no longer all make the same split on the dominant feature, so their errors are more independent and cancel out more effectively when combined. The final prediction is a majority vote across all trees for classification, or an average for regression.</p>
+
+                    <p>Random Forests also provide a free bonus: the <strong>Out-of-Bag (OOB) score</strong>. Because each tree is trained on a bootstrap sample (~63% of the data), the remaining ~37% of laps were never seen by that tree. These held-out laps can be used to evaluate that tree's performance without touching the official test set — and averaging OOB accuracy across all trees gives a nearly unbiased estimate of generalisation error at no additional computation cost.</p>
+
+                    <div class="viz-image-container">
+                        <img src="img/ensemble_rf_concept.png" alt="Random Forest error convergence and feature randomness">
+                    </div>
+                    <p>Left: test accuracy and OOB error converge as more trees are added — the ensemble becomes more stable without overfitting. Right: each tree sees a different random feature subset at each split, ensuring the trees are decorrelated and their majority vote is meaningful.</p>
+
+                    <h3>AdaBoost — Boosting with Decision Stumps</h3>
+                    <p>AdaBoost (Adaptive Boosting) builds an ensemble sequentially. It starts with equal weights on all training samples, fits a weak learner (typically a <em>decision stump</em> — a tree of depth 1, making a single split on a single feature), then increases the weight of misclassified samples so the next learner focuses on the hard cases. After many rounds, the final prediction is a weighted vote where more accurate learners get a higher say. AdaBoost can theoretically build any decision boundary from stumps alone, but requires many iterations and is sensitive to noisy labels.</p>
+                </div>
+
+                <!-- ══════════════════════════════════════ -->
+                <!-- DATA PREP                              -->
+                <!-- ══════════════════════════════════════ -->
+                <div class="data-section">
+                    <h3>(b) Data Preparation</h3>
+                    <p>The same F1 lap telemetry dataset used throughout Modules 3 and SVM is reused here, ensuring all model families are evaluated on identical data and accuracy comparisons are meaningful. Random Forest and AdaBoost work on raw unscaled features (tree-based methods are invariant to monotonic feature transformations). The Voting Classifier includes an SVM and Logistic Regression component, so <strong>StandardScaler</strong> is applied before feeding data to those models.</p>
+
+                    <div class="data-card">
+                        <p><strong>Source:</strong> <a href="https://github.com/theOehrly/Fast-F1" target="_blank" style="color:var(--accent);text-decoration:none;">FastF1 API — 2023 season, 5 races</a></p>
+                        <p><strong>Features (9):</strong> LapTime · Sector1Time · Sector2Time · Sector3Time · SpeedI1 · SpeedI2 · SpeedFL · SpeedST · TyreLife</p>
+                        <p><strong>Label:</strong> <code>IsSoft</code> — 1 = SOFT compound, 0 = MEDIUM or HARD</p>
+                        <p><strong>Split:</strong> 80% train / 20% test, stratified, random_state=42</p>
+                        <p><strong>Scaling:</strong> Raw features for RF &amp; AdaBoost &nbsp;|&nbsp; StandardScaled for Voting Classifier (SVM + LR components)</p>
+                        <p><strong>📎 Notebook:</strong> <a href="https://github.com/Shugavaneshwar/F1-Project/blob/main/F1_Project_Ensemble.ipynb" target="_blank" style="color:var(--accent);text-decoration:none;">F1_Project_Ensemble.ipynb on GitHub ↗</a></p>
+                    </div>
+
+                    <div class="viz-image-container">
+                        <img src="img/ensemble_train_test_split.png" alt="Train test split">
+                    </div>
+                </div>
+
+                <!-- ══════════════════════════════════════ -->
+                <!-- CODE                                   -->
+                <!-- ══════════════════════════════════════ -->
+                <div class="data-section">
+                    <h3>(b) Code</h3>
+                    <p>Three ensemble methods are implemented and compared using <code>sklearn.ensemble</code>:</p>
+                    <div class="data-card">
+                        <p><strong>1. Random Forest</strong> — <code>RandomForestClassifier(n_estimators=N, oob_score=True)</code> swept over N ∈ {1, 5, 10, 25, 50, 100, 200, 300}. OOB score is tracked alongside test accuracy to select the optimal N.</p>
+                        <p><strong>2. AdaBoost</strong> — <code>AdaBoostClassifier(estimator=DecisionTreeClassifier(max_depth=1))</code> with decision stumps, swept over N ∈ {10, 25, 50, 100, 200}.</p>
+                        <p><strong>3. Voting Classifier</strong> — <code>VotingClassifier(estimators=[('rf',...), ('svm',...), ('lr',...)], voting='hard'/'soft')</code> combining Random Forest + RBF SVM + Logistic Regression. Both hard and soft voting modes are evaluated.</p>
+                        <p><strong>📎 Full code:</strong> <a href="https://github.com/Shugavaneshwar/F1-Project/blob/main/F1_Project_Ensemble.ipynb" target="_blank" style="color:var(--accent);text-decoration:none;">F1_Project_Ensemble.ipynb ↗</a></p>
+                    </div>
+                </div>
+
+                <!-- ══════════════════════════════════════ -->
+                <!-- RESULTS                                -->
+                <!-- ══════════════════════════════════════ -->
+                <div class="data-section">
+                    <h3>(b) Results</h3>
+
+                    <!-- n_estimators sweep -->
+                    <div class="visualization-item">
+                        <div class="viz-header">
+                            <div class="viz-number">Ensemble Result 01</div>
+                            <h3 class="viz-title">Random Forest — Test Accuracy &amp; OOB Score vs n_estimators</h3>
+                            <p class="viz-description">As more trees are added, both test accuracy and OOB score rise quickly and then plateau. Adding trees beyond ~100 provides diminishing returns — accuracy stabilises and any further improvement is negligible. The OOB score closely tracks test accuracy, confirming it is a reliable free estimate of generalisation performance. The best n_estimators is annotated on the chart. Notice that even a forest of just 10 trees outperforms most individual models from earlier modules — the diversity benefit kicks in almost immediately.</p>
+                        </div>
+                        <div class="viz-image-container">
+                            <img src="img/ensemble_rf_oob.png" alt="Random Forest n_estimators sweep OOB accuracy">
+                        </div>
+                    </div>
+
+                    <!-- RF confusion matrix -->
+                    <div class="visualization-item">
+                        <div class="viz-header">
+                            <div class="viz-number">Ensemble Result 02</div>
+                            <h3 class="viz-title">Random Forest — Confusion Matrix (Best n_estimators)</h3>
+                            <p class="viz-description">The Random Forest correctly classifies the vast majority of NOT-SOFT laps (true negatives) and captures more SOFT laps (true positives) than earlier single-model methods. The bottom-right cell — SOFT laps correctly identified — is the hardest win given the ~10:1 class imbalance. Comparing this to the Decision Tree and SVM confusion matrices from previous modules reveals the concrete benefit of ensemble diversity: individual trees misclassify different borderline laps, but the majority vote corrects most of those individual mistakes.</p>
+                        </div>
+                        <div class="viz-image-container">
+                            <img src="img/ensemble_rf_cm.png" alt="Random Forest confusion matrix">
+                        </div>
+                    </div>
+
+                    <!-- Feature importance -->
+                    <div class="visualization-item">
+                        <div class="viz-header">
+                            <div class="viz-number">Ensemble Result 03</div>
+                            <h3 class="viz-title">Random Forest — Feature Importance</h3>
+                            <p class="viz-description">Feature importance is measured as the mean decrease in Gini impurity across all trees and all splits on each feature. Error bars show the standard deviation across trees — small bars indicate that all trees agree on a feature's importance, large bars indicate variability in how different trees use that feature. <strong>TyreLife</strong> dominates by a large margin — physically correct, since SOFT tyres are almost always on their first few laps. <strong>Sector2Time</strong> and <strong>LapTime</strong> are next, capturing the speed advantage of SOFT rubber. Speed trap features (SpeedI1, SpeedI2, SpeedFL, SpeedST) contribute less individually but collectively add information. This ranking is strikingly consistent with the Decision Tree root nodes from Module 3, providing strong cross-model validation.</p>
+                        </div>
+                        <div class="viz-image-container">
+                            <img src="img/ensemble_feature_importance.png" alt="Random Forest feature importance">
+                        </div>
+                    </div>
+
+                    <!-- One tree -->
+                    <div class="visualization-item">
+                        <div class="viz-header">
+                            <div class="viz-number">Ensemble Result 04</div>
+                            <h3 class="viz-title">One Tree from the Random Forest</h3>
+                            <p class="viz-description">A single estimator from the forest, visualised to depth 3. Each individual tree is a full, unconstrained decision tree grown on a bootstrap sample with random feature subsets — it may be deep and somewhat overfit to its particular bootstrap sample. What makes the Random Forest powerful is that no single tree needs to be perfect: hundreds of these individually imperfect trees, each making different errors on different laps, produce a collective majority vote that is far more accurate and stable than any one of them alone. Compare this tree's structure to the pruned trees in the Decision Tree module — the forest trees are deeper and more irregular, but that is intentional.</p>
+                        </div>
+                        <div class="viz-image-container">
+                            <img src="img/ensemble_rf_tree.png" alt="One tree from Random Forest">
+                        </div>
+                    </div>
+
+                    <!-- AdaBoost CM -->
+                    <div class="visualization-item">
+                        <div class="viz-header">
+                            <div class="viz-number">Ensemble Result 05</div>
+                            <h3 class="viz-title">AdaBoost — Confusion Matrix (Decision Stumps)</h3>
+                            <p class="viz-description">AdaBoost with decision stumps achieves competitive but lower accuracy than Random Forest on this dataset. The confusion matrix shows the model handles the NOT-SOFT majority class well but struggles more with SOFT minority laps than the Random Forest does. This is expected: stumps (depth=1) make a single binary split on a single feature, which is an extremely weak boundary for a problem where compound identification requires considering TyreLife <em>and</em> speed <em>and</em> lap time together. Boosting can combine stumps into complex boundaries, but it needs many more rounds than Random Forest needs trees, and it is more sensitive to the class imbalance.</p>
+                        </div>
+                        <div class="viz-image-container">
+                            <img src="img/ensemble_adaboost_cm.png" alt="AdaBoost confusion matrix">
+                        </div>
+                    </div>
+
+                    <!-- Voting CMs -->
+                    <div class="visualization-item">
+                        <div class="viz-header">
+                            <div class="viz-number">Ensemble Result 06</div>
+                            <h3 class="viz-title">Voting Classifier (RF + SVM + LR) — Hard vs Soft Voting</h3>
+                            <p class="viz-description">Both hard and soft voting combine three diverse model types: Random Forest (tree-based bagging), RBF SVM (kernel method), and Logistic Regression (linear probabilistic model). Soft voting outperforms hard voting because it weights each vote by predicted probability rather than treating every vote equally — a model that is 99% confident in SOFT counts more than one that is 51% confident. The diversity of model types means the ensemble catches mistakes that no single method alone would fix: the SVM captures curved boundaries the LR misses; the RF handles nonlinear feature interactions the SVM kernel approximates; the LR adds a stable linear baseline. Together they cover each other's blind spots.</p>
+                        </div>
+                        <div class="viz-image-container">
+                            <img src="img/ensemble_voting_cms.png" alt="Voting classifier hard and soft confusion matrices">
+                        </div>
+                    </div>
+
+                    <!-- Full comparison -->
+                    <div class="visualization-item">
+                        <div class="viz-header">
+                            <div class="viz-number">Ensemble Result 07</div>
+                            <h3 class="viz-title">Full Model Comparison — All Methods</h3>
+                            <p class="viz-description">Every model trained across Modules 3, SVM, and Ensemble, ranked by test accuracy on the identical 80/20 split. Red bars are ensemble methods; grey bars are individual models from previous modules. The Random Forest sits at or near the top, confirming that bagging over many decorrelated trees is the most effective strategy for this F1 compound prediction task. The Voting Classifier is competitive — sometimes matching or exceeding the Random Forest depending on the specific train/test split — because combining three diverse model types captures different aspects of the class structure. Notably, even the weakest ensemble method (AdaBoost with stumps) is competitive with the best individual model (Best DT), showing that ensemble techniques consistently add value.</p>
+                        </div>
+                        <div class="viz-image-container">
+                            <img src="img/ensemble_comparison.png" alt="Full model comparison all methods">
+                        </div>
+                    </div>
+                </div>
+
+                <!-- ══════════════════════════════════════ -->
+                <!-- CONCLUSIONS                            -->
+                <!-- ══════════════════════════════════════ -->
+                <div class="data-section">
+                    <h3>Conclusions</h3>
+
+                    <p><strong>1. Random Forest (n=200) is the strongest model across all modules — 95.26% test accuracy.</strong> By aggregating 200 decorrelated decision trees — each trained on a random bootstrap sample and a random feature subset — the forest reduces the high variance of individual trees without increasing bias. The OOB score (95.08%) closely tracks test accuracy, confirming it is a reliable free validation estimate. For comparison: the best Decision Tree achieved 93.91%, the best SVM 92.69%, and Naïve Bayes 90.86% — the Random Forest beats every individual model by a meaningful margin.</p>
+
+                    <p><strong>2. Feature importance gives the clearest signal yet: TyreLife drives compound identification.</strong> Across all trees and all splits, TyreLife is by far the most informative feature for identifying SOFT compound laps. This is physically correct — teams almost never run SOFT tyres beyond lap 15–20, so a high TyreLife value is a near-definitive indicator of MEDIUM or HARD compound. The Random Forest quantifies exactly how much more informative TyreLife is compared to all other features, providing a ranked, interpretable picture of what actually discriminates compound in F1 telemetry data.</p>
+
+                    <p><strong>3. Hard and Soft Voting both achieved 93.20%</strong> — placing them above SVM (92.69%) and AdaBoost (91.9%) but below the standalone Random Forest. This means the diversity of combining RF, SVM, and LR adds value over any of those models alone, but the Random Forest already captures so much of the data structure that the other two models don't add significant new signal. <strong>Soft voting consistently beats hard voting in most scenarios</strong> When three diverse models (RF, SVM, LR) disagree on a borderline lap, soft voting's probability averaging correctly defers to the most confident model. Hard voting treats a 51% confidence and a 99% confidence identically — a clear information loss. In an operational F1 analytics system, probability-weighted ensemble predictions would also produce a compound confidence score alongside the hard prediction, enabling strategy engineers to flag uncertain laps for manual review rather than acting blindly on a hard binary output.</p>
+
+                    <p><strong>4. AdaBoost with stumps is the weakest ensemble here — but the lesson is why.</strong> Decision stumps (depth=1) are too weak for a problem that requires simultaneously considering TyreLife, LapTime, and speed features to identify SOFT compound. Boosting needs many rounds to approximate the compound boundary from stumps alone, and the 10:1 class imbalance makes up-weighting SOFT misclassifications difficult without also creating false positives. Replacing stumps with slightly deeper base learners (depth=2 or 3) would likely close the gap with Random Forest significantly.</p>
+
+                    <p><strong>5. F1 strategic implication.</strong> A Random Forest or Soft Voting ensemble deployed on a live timing feed could infer competitor tyre compound from public broadcast data with the highest accuracy of any method tested in this project. More importantly, <code>predict_proba</code> outputs give a per-lap confidence score — a race engineer could monitor a live probability dashboard, flagging when a competitor's compound probability crosses 70% or 90% as a trigger for strategy adjustments. This goes beyond binary classification: it makes the model a real-time intelligence tool for race decision-making.</p>
+                </div>
             </div>
         </div>
 
